@@ -1,0 +1,795 @@
+<!DOCTYPE html>
+<html lang="es" class="h-full scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Language Academy | Portal de Admisiones y Asistente Académico</title>
+  
+  <!-- Typography: Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Lucide Icons CDN -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  
+  <!-- Marked.js for Markdown Rendering -->
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+          },
+          colors: {
+            navy: {
+              50: '#f0f4f8',
+              100: '#d9e2ec',
+              800: '#243b53',
+              900: '#102a43',
+              950: '#0b1d30',
+            },
+            primary: {
+              50: '#eff6ff',
+              100: '#dbeafe',
+              600: '#2563eb',
+              700: '#1d4ed8',
+              800: '#1e40af',
+              900: '#1e3a8a',
+            }
+          },
+          boxShadow: {
+            'soft': '0 4px 20px -2px rgba(16, 42, 67, 0.06)',
+            'card': '0 10px 30px -4px rgba(16, 42, 67, 0.05)',
+            'float': '0 20px 40px -6px rgba(16, 42, 67, 0.10)',
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    body {
+      background-color: #f8fafc;
+      color: #1e293b;
+    }
+    
+    .chat-markdown {
+      color: #334155;
+      font-size: 0.9375rem;
+      line-height: 1.65;
+    }
+    .chat-markdown p {
+      margin-bottom: 0.65rem;
+    }
+    .chat-markdown p:last-child {
+      margin-bottom: 0;
+    }
+    .chat-markdown ul, .chat-markdown ol {
+      margin-left: 1.25rem;
+      margin-bottom: 0.65rem;
+      list-style-type: disc;
+    }
+    .chat-markdown li {
+      margin-bottom: 0.25rem;
+    }
+    .chat-markdown strong {
+      color: #0f172a;
+      font-weight: 700;
+    }
+    .chat-markdown h1, .chat-markdown h2, .chat-markdown h3 {
+      font-weight: 700;
+      color: #1e3a8a;
+      margin-top: 0.75rem;
+      margin-bottom: 0.35rem;
+      font-size: 1rem;
+    }
+
+    .modal-backdrop {
+      background-color: rgba(15, 23, 42, 0.6);
+      backdrop-filter: blur(4px);
+    }
+
+    .view-panel {
+      transition: opacity 0.2s ease-in-out;
+    }
+  </style>
+</head>
+<body class="min-h-full flex flex-col antialiased bg-slate-50 text-slate-800">
+
+  <!-- ========================================================= -->
+  <!-- 1. HEADER INSTITUCIONAL CON NAVEGACIÓN SPA                -->
+  <!-- ========================================================= -->
+  <header class="bg-white border-b border-slate-200 sticky top-0 z-40 shadow-sm">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+      
+      <!-- Dynamic Brand Logo -->
+      <a href="javascript:void(0)" onclick="navigateToView('view-assistant')" class="flex items-center gap-3 group">
+        <div class="w-10 h-10 rounded-xl bg-primary-800 flex items-center justify-center text-white shadow-md shadow-primary-900/20 group-hover:bg-primary-700 transition-colors">
+          <i data-lucide="graduation-cap" class="w-5 h-5"></i>
+        </div>
+        <div>
+          <span id="header-inst-name" class="block text-base font-black tracking-tight text-navy-950 leading-none">LANGUAGE ACADEMY</span>
+
+          <span class="block text-xs text-slate-500 font-medium tracking-wide mt-1">Portal de Admisiones</span>
+        </div>
+      </a>
+
+      <!-- SPA Navigation Bar -->
+      <nav class="hidden md:flex items-center gap-1.5 p-1 bg-slate-100/80 rounded-2xl border border-slate-200/80 text-xs font-bold">
+        <button onclick="navigateToView('view-assistant')" id="nav-view-assistant" class="nav-tab-btn px-4 py-2 rounded-xl transition-all bg-white text-primary-800 shadow-sm">
+          Asistente de Admisiones
+        </button>
+        <button onclick="navigateToView('view-programs')" id="nav-view-programs" class="nav-tab-btn px-4 py-2 rounded-xl transition-all text-slate-600 hover:text-slate-900">
+          Programas
+        </button>
+        <button onclick="navigateToView('view-schedules')" id="nav-view-schedules" class="nav-tab-btn px-4 py-2 rounded-xl transition-all text-slate-600 hover:text-slate-900">
+          Horarios
+        </button>
+        <button onclick="navigateToView('view-campuses')" id="nav-view-campuses" class="nav-tab-btn px-4 py-2 rounded-xl transition-all text-slate-600 hover:text-slate-900">
+          Sedes
+        </button>
+      </nav>
+
+      <!-- Primary Action -->
+      <div class="flex items-center gap-2.5">
+        <button onclick="openModal('quote-modal')" class="hidden sm:inline-flex bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold px-3.5 py-2.5 rounded-xl border border-slate-200 transition-colors items-center gap-1.5">
+          <i data-lucide="calculator" class="w-4 h-4 text-emerald-600"></i>
+          <span>Cotizar COP</span>
+        </button>
+        <button onclick="openModal('advisor-modal')" class="bg-primary-800 hover:bg-primary-700 text-white text-xs sm:text-sm font-bold px-4 py-2.5 rounded-xl shadow-soft transition-all flex items-center gap-1.5">
+          <i data-lucide="headset" class="w-4 h-4 text-blue-200"></i>
+          <span>Hablar con Asesor</span>
+        </button>
+      </div>
+
+    </div>
+
+    <!-- Mobile Navigation Sub-Bar -->
+    <div class="md:hidden flex items-center justify-around border-t border-slate-100 px-2 py-1.5 bg-slate-50 text-[11px] font-bold">
+      <button onclick="navigateToView('view-assistant')" class="p-1.5 text-primary-800">Asistente</button>
+      <button onclick="navigateToView('view-programs')" class="p-1.5 text-slate-600">Programas</button>
+      <button onclick="navigateToView('view-schedules')" class="p-1.5 text-slate-600">Horarios</button>
+      <button onclick="navigateToView('view-campuses')" class="p-1.5 text-slate-600">Sedes</button>
+    </div>
+
+  </header>
+
+  <!-- ========================================================= -->
+  <!-- MAIN APP CONTAINER                                        -->
+  <!-- ========================================================= -->
+  <main class="flex-1 max-w-5xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 flex flex-col">
+    
+    <!-- ======================================================= -->
+    <!-- VISTA 1: ASISTENTE DE ADMISIONES                        -->
+    <!-- ======================================================= -->
+    <section id="view-assistant" class="view-panel block space-y-8">
+      
+      <!-- Hero Banner -->
+      <div class="text-center max-w-2xl mx-auto pt-2">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary-100/70 border border-primary-200 text-primary-800 text-xs font-bold uppercase tracking-wider mb-3">
+          <i data-lucide="sparkles" class="w-3.5 h-3.5 text-primary-700"></i>
+          <span>Asistente Digital de Admisiones</span>
+        </div>
+        <h1 class="text-3xl sm:text-4xl font-extrabold text-navy-950 tracking-tight leading-tight">
+          Encuentra el programa ideal para tu futuro
+        </h1>
+        <p class="mt-2 text-sm text-slate-600">
+          Consulta programas, precios en COP, horarios y convenios institucionales de forma guiada o libre.
+        </p>
+      </div>
+
+      <!-- Assistant Card Container -->
+      <div class="bg-white rounded-3xl border border-slate-200/90 shadow-float overflow-hidden flex flex-col max-w-3xl mx-auto w-full">
+        
+        <!-- Assistant Top Banner -->
+        <div class="bg-navy-950 text-white px-5 py-4 flex items-center justify-between border-b border-navy-900">
+          <div class="flex items-center gap-3">
+            <div class="w-9 h-9 rounded-full bg-primary-600 flex items-center justify-center text-white font-bold shadow-inner">
+              <i data-lucide="user-check" class="w-4 h-4"></i>
+            </div>
+            <div>
+              <div class="flex items-center gap-2">
+                <h2 id="assistant-card-title" class="font-bold text-sm text-white">Orientación de Admisiones</h2>
+                <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+              </div>
+              <p class="text-[11px] text-slate-300">Respuestas basadas en los documentos oficiales indexados en el sistema</p>
+            </div>
+          </div>
+          <button onclick="resetGuidedFlow()" class="text-xs text-slate-300 hover:text-white px-2.5 py-1 rounded-lg bg-navy-900 hover:bg-navy-800 border border-slate-700/80 transition-colors flex items-center gap-1">
+            <i data-lucide="rotate-ccw" class="w-3 h-3"></i>
+            <span>Reiniciar</span>
+          </button>
+        </div>
+
+        <!-- Chat Feed -->
+        <div id="chat-messages" class="p-5 sm:p-6 space-y-4 min-h-[340px] max-h-[500px] overflow-y-auto bg-slate-50/50">
+          <!-- Initial Welcome Card -->
+          <div class="flex items-start gap-3">
+            <div class="w-8 h-8 rounded-full bg-primary-100 text-primary-800 flex items-center justify-center shrink-0 mt-0.5 font-bold text-xs">
+              <i data-lucide="sparkles" class="w-4 h-4"></i>
+            </div>
+            <div class="flex-1 space-y-3">
+              <div class="bg-white border border-slate-200 rounded-2xl rounded-tl-none p-4 shadow-sm text-sm text-slate-700 leading-relaxed max-w-xl">
+                ¡Hola! Te doy la bienvenida. Estoy aquí para acompañarte y resolver cualquier duda sobre nuestros programas académicos, precios oficiales y horarios.
+                <br><br>
+                <strong>¿En qué te puedo orientar hoy?</strong>
+              </div>
+
+              <!-- Dynamic Guided Options Chips Container -->
+              <div id="initial-step-chips" class="flex flex-wrap gap-2 pt-1">
+                <!-- Dynamically injected from /api/catalog -->
+                <div class="text-xs text-slate-400 py-1">Cargando opciones dinámicas del catálogo...</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Thinking Indicator -->
+        <div id="chat-thinking" class="hidden px-6 py-2.5 bg-slate-100 border-t border-slate-200 flex items-center gap-2 text-xs text-slate-500 font-medium">
+          <i data-lucide="loader-2" class="w-4 h-4 animate-spin text-primary-700"></i>
+          <span>El asistente está consultando la información oficial...</span>
+        </div>
+
+        <!-- Free-form Query Input Footer -->
+        <div class="p-4 bg-white border-t border-slate-200">
+          <form onsubmit="handleFreeTextQuery(event)" class="flex gap-2">
+            <input 
+              type="text" 
+              id="free-query-input" 
+              placeholder="O escribe tu pregunta libre (ej. ¿Qué cursos y horarios tienen disponibles?)"
+              class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-xs sm:text-sm text-slate-800 placeholder-slate-400 focus:outline-none focus:bg-white focus:border-primary-600 focus:ring-2 focus:ring-primary-500/10 transition-all"
+            >
+            <button 
+              type="submit" 
+              class="bg-primary-800 hover:bg-primary-700 text-white px-4 rounded-xl text-xs font-bold shadow-sm transition-all flex items-center gap-1 shrink-0"
+            >
+              <span class="hidden sm:inline">Consultar</span>
+              <i data-lucide="send" class="w-3.5 h-3.5"></i>
+            </button>
+          </form>
+        </div>
+
+      </div>
+
+      <!-- Quick Access Hub to Other Views -->
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 max-w-3xl mx-auto w-full pt-2">
+        <button onclick="navigateToView('view-programs')" class="bg-white hover:bg-slate-50 border border-slate-200 p-3.5 rounded-2xl text-left transition-all shadow-card flex flex-col justify-between">
+          <i data-lucide="book-open" class="w-4 h-4 text-primary-700 mb-2"></i>
+          <span class="text-xs font-bold text-navy-950">Ver Programas</span>
+        </button>
+        <button onclick="navigateToView('view-schedules')" class="bg-white hover:bg-slate-50 border border-slate-200 p-3.5 rounded-2xl text-left transition-all shadow-card flex flex-col justify-between">
+          <i data-lucide="calendar" class="w-4 h-4 text-blue-600 mb-2"></i>
+          <span class="text-xs font-bold text-navy-950">Ver Horarios</span>
+        </button>
+        <button onclick="openModal('quote-modal')" class="bg-white hover:bg-slate-50 border border-slate-200 p-3.5 rounded-2xl text-left transition-all shadow-card flex flex-col justify-between">
+          <i data-lucide="calculator" class="w-4 h-4 text-emerald-600 mb-2"></i>
+          <span class="text-xs font-bold text-navy-950">Cotizar Matrícula</span>
+        </button>
+        <button onclick="navigateToView('view-campuses')" class="bg-white hover:bg-slate-50 border border-slate-200 p-3.5 rounded-2xl text-left transition-all shadow-card flex flex-col justify-between">
+          <i data-lucide="map-pin" class="w-4 h-4 text-indigo-600 mb-2"></i>
+          <span class="text-xs font-bold text-navy-950">Sedes y Modalidades</span>
+        </button>
+      </div>
+
+    </section>
+
+    <!-- ======================================================= -->
+    <!-- VISTA 2: PROGRAMAS ACADÉMICOS (100% DINÁMICO)           -->
+    <!-- ======================================================= -->
+    <section id="view-programs" class="view-panel hidden space-y-6">
+      <div class="text-center max-w-xl mx-auto">
+        <h2 class="text-2xl sm:text-3xl font-extrabold text-navy-950 tracking-tight">Programas Académicos</h2>
+        <p class="mt-1.5 text-xs sm:text-sm text-slate-500">Programas extraídos dinámicamente de los documentos oficiales cargados en el sistema.</p>
+      </div>
+
+      <div id="programs-grid" class="grid grid-cols-1 md:grid-cols-3 gap-5">
+        <!-- Injected dynamically from /api/catalog -->
+        <div class="col-span-3 text-center py-8 text-slate-400 text-xs">Cargando programas de la base de conocimiento...</div>
+      </div>
+    </section>
+
+    <!-- ======================================================= -->
+    <!-- VISTA 3: HORARIOS Y JORNADAS (100% DINÁMICO)            -->
+    <!-- ======================================================= -->
+    <section id="view-schedules" class="view-panel hidden space-y-6">
+      <div class="text-center max-w-xl mx-auto">
+        <h2 class="text-2xl sm:text-3xl font-extrabold text-navy-950 tracking-tight">Horarios y Jornadas</h2>
+        <p class="mt-1.5 text-xs sm:text-sm text-slate-500">Jornadas oficiales detectadas en los documentos de la institución.</p>
+      </div>
+
+      <div id="schedules-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <!-- Injected dynamically from /api/catalog -->
+        <div class="col-span-4 text-center py-8 text-slate-400 text-xs">Cargando horarios de la base de conocimiento...</div>
+      </div>
+
+      <div class="text-center pt-2">
+        <button onclick="askFromProgram('¿Qué horarios y cupos tienen disponibles para este mes?')" class="text-xs font-bold text-primary-800 hover:underline">
+          Consultar disponibilidad de cupos con el asistente &rarr;
+        </button>
+      </div>
+    </section>
+
+    <!-- ======================================================= -->
+    <!-- VISTA 4: SEDES Y MODALIDADES (100% DINÁMICO)            -->
+    <!-- ======================================================= -->
+    <section id="view-campuses" class="view-panel hidden space-y-6">
+      <div class="text-center max-w-xl mx-auto">
+        <h2 class="text-2xl sm:text-3xl font-extrabold text-navy-950 tracking-tight">Sedes y Modalidades</h2>
+        <p class="mt-1.5 text-xs sm:text-sm text-slate-500">Ubicaciones físicas y modalidades de estudio disponibles.</p>
+      </div>
+
+      <div id="campuses-grid" class="grid grid-cols-1 md:grid-cols-2 gap-5">
+        <!-- Injected dynamically from /api/catalog -->
+        <div class="col-span-2 text-center py-8 text-slate-400 text-xs">Cargando sedes y modalidades...</div>
+      </div>
+    </section>
+
+  </main>
+
+
+  <!-- ========================================================= -->
+  <!-- MODAL: COTIZADOR DE MATRÍCULA                             -->
+  <!-- ========================================================= -->
+  <div id="quote-modal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4 modal-backdrop">
+    <div class="bg-white rounded-3xl max-w-lg w-full p-6 shadow-float border border-slate-200 relative">
+      <button onclick="closeModal('quote-modal')" class="absolute top-5 right-5 text-slate-400 hover:text-slate-700">
+        <i data-lucide="x" class="w-5 h-5"></i>
+      </button>
+
+      <div class="mb-4">
+        <h3 class="text-base font-bold text-navy-950 flex items-center gap-2">
+          <i data-lucide="calculator" class="w-4 h-4 text-emerald-600"></i>
+          <span>Cotizador Oficial de Matrícula</span>
+        </h3>
+        <p class="text-xs text-slate-500 mt-0.5">Calcula valores en pesos colombianos con descuentos aplicados.</p>
+      </div>
+
+      <form onsubmit="calculateQuote(event)" class="space-y-3 text-xs">
+        <div>
+          <label class="block font-bold text-slate-600 mb-1">Programa:</label>
+          <select id="modal-quote-program" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-slate-800 font-medium outline-none">
+            <option value="standard">Programa Estándar (16 sem - 96 hrs)</option>
+            <option value="intensive">Track Intensivo de Inmersión (8 sem)</option>
+            <option value="business">Especialización / Corporativo (12 sem)</option>
+            <option value="exam_prep">Preparación de Certificaciones Oficiales</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block font-bold text-slate-600 mb-1">Modalidad de Pago:</label>
+          <select id="modal-quote-plan" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-slate-800 font-medium outline-none">
+            <option value="upfront">Pago de Contado (Mayor Ahorro)</option>
+            <option value="installments">Financiación en Cuotas Mensuales</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block font-bold text-slate-600 mb-1">Convenio o Descuento:</label>
+          <select id="modal-quote-discount" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-slate-800 font-medium outline-none">
+            <option value="none">Sin descuento</option>
+            <option value="early_bird">Pronto Pago (-15%)</option>
+            <option value="compensar_a">Caja Compensar - Categoría A (-20%)</option>
+            <option value="compensar_b">Caja Compensar - Categoría B (-15%)</option>
+            <option value="colsubsidio_a">Caja Colsubsidio - Categoría A (-20%)</option>
+            <option value="comfama_a">Caja Comfama - Categoría A (-20%)</option>
+            <option value="university_student">Estudiante Universitario (-10%)</option>
+          </select>
+        </div>
+
+        <button type="submit" class="w-full bg-primary-800 hover:bg-primary-700 text-white font-bold py-2.5 rounded-xl shadow-soft transition-all mt-2">
+          Calcular Inversión
+        </button>
+      </form>
+
+      <div id="modal-quote-result" class="mt-3.5 hidden bg-slate-50 border border-slate-200 rounded-xl p-3.5 text-xs">
+        <div class="flex justify-between py-1 border-b border-slate-200">
+          <span class="text-slate-500">Valor Base:</span>
+          <span id="m-res-base" class="font-bold text-slate-800">$0 COP</span>
+        </div>
+        <div class="flex justify-between py-1 border-b border-slate-200 text-emerald-700">
+          <span class="font-medium">Descuento:</span>
+          <span id="m-res-disc" class="font-bold">-$0 COP</span>
+        </div>
+        <div class="flex justify-between items-baseline pt-1.5">
+          <span class="font-bold text-navy-950">Inversión Final:</span>
+          <span id="m-res-total" class="text-sm font-extrabold text-primary-800">$0 COP</span>
+        </div>
+        <p id="m-res-installments" class="mt-1.5 text-[11px] text-slate-500 bg-white p-1.5 rounded border border-slate-200 text-center font-medium"></p>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ========================================================= -->
+  <!-- MODAL: ASESOR HUMANO                                      -->
+  <!-- ========================================================= -->
+  <div id="advisor-modal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4 modal-backdrop">
+    <div class="bg-white rounded-3xl max-w-md w-full p-6 shadow-float border border-slate-200 relative text-center">
+      <button onclick="closeModal('advisor-modal')" class="absolute top-5 right-5 text-slate-400 hover:text-slate-700">
+        <i data-lucide="x" class="w-5 h-5"></i>
+      </button>
+
+      <div class="w-10 h-10 rounded-2xl bg-blue-50 text-primary-800 flex items-center justify-center mx-auto mb-3">
+        <i data-lucide="headset" class="w-5 h-5"></i>
+      </div>
+
+      <h3 class="text-base font-bold text-navy-950">Asesoría Directa de Admisiones</h3>
+      <p class="text-xs text-slate-500 mt-1 max-w-xs mx-auto">
+        Comunícate con nuestro equipo académico para resolver tus preguntas sobre matrículas y convenios.
+      </p>
+
+      <div class="mt-5 space-y-2.5 text-left">
+        <a href="https://wa.me/573001234567" target="_blank" class="flex items-center gap-3 p-3 rounded-xl border border-slate-200 hover:border-emerald-500 hover:bg-emerald-50/30 transition-all text-xs font-semibold text-slate-800">
+          <i data-lucide="phone-call" class="w-4 h-4 text-emerald-600"></i>
+          <div>
+            <span class="block">WhatsApp Oficial de Admisiones</span>
+            <span id="advisor-phone" class="text-slate-500 font-normal">+57 (300) 123-4567</span>
+          </div>
+        </a>
+
+        <a id="advisor-email-link" href="mailto:admisiones@languageacademy.edu.co" class="flex items-center gap-3 p-3 rounded-xl border border-slate-200 hover:border-primary-500 hover:bg-primary-50/30 transition-all text-xs font-semibold text-slate-800">
+          <i data-lucide="mail" class="w-4 h-4 text-primary-700"></i>
+          <div>
+            <span class="block">Correo Institucional</span>
+            <span id="advisor-email" class="text-slate-500 font-normal">admisiones@languageacademy.edu.co</span>
+          </div>
+        </a>
+      </div>
+
+      <p id="advisor-hours" class="mt-4 text-[11px] text-slate-400">Atención: Lunes a Viernes 8:00 AM - 6:00 PM | Sábados 8:00 AM - 1:00 PM</p>
+    </div>
+  </div>
+
+  <!-- ========================================================= -->
+  <!-- FOOTER                                                    -->
+  <!-- ========================================================= -->
+  <footer class="bg-white border-t border-slate-200 mt-auto py-5 px-4 sm:px-6 lg:px-8 text-center text-xs text-slate-500">
+    <div class="max-w-5xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2">
+      <div class="flex items-center gap-2">
+        <span id="footer-inst-name" class="font-bold text-navy-950">LANGUAGE ACADEMY</span>
+        <span>&bull;</span>
+        <span>Portal de Admisiones Inteligente</span>
+      </div>
+
+      <p id="footer-contact">Atención Oficial &bull; WhatsApp: +57 (300) 123-4567</p>
+    </div>
+  </footer>
+
+  <!-- ========================================================= -->
+  <!-- JAVASCRIPT: SPA NAVIGATION & DYNAMIC CATALOG RENDERING    -->
+  <!-- ========================================================= -->
+  <script>
+    let globalCatalog = null;
+
+    document.addEventListener('DOMContentLoaded', () => {
+      loadCatalogAndDocs();
+    });
+
+    // SPA Navigation Function
+    function navigateToView(viewId) {
+      document.querySelectorAll('.view-panel').forEach(el => el.classList.add('hidden'));
+      document.querySelectorAll('.nav-tab-btn').forEach(btn => {
+        btn.classList.remove('bg-white', 'text-primary-800', 'shadow-sm');
+        btn.classList.add('text-slate-600');
+      });
+
+      const target = document.getElementById(viewId);
+      if (target) {
+        target.classList.remove('hidden');
+      }
+
+      const activeNav = document.getElementById('nav-' + viewId);
+      if (activeNav) {
+        activeNav.classList.add('bg-white', 'text-primary-800', 'shadow-sm');
+        activeNav.classList.remove('text-slate-600');
+      }
+
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      lucide.createIcons();
+    }
+
+    function openModal(id) {
+      document.getElementById(id).classList.remove('hidden');
+      lucide.createIcons();
+    }
+
+    function closeModal(id) {
+      document.getElementById(id).classList.add('hidden');
+    }
+
+    // Dynamic Catalog Loader from /api/catalog
+    async function loadCatalogAndDocs() {
+      try {
+        const res = await fetch('/api/catalog');
+        const data = await res.json();
+        globalCatalog = data;
+
+        // 1. Update Institution Name & Contacts
+        if (data.institution_name) {
+          document.getElementById('header-inst-name').innerText = data.institution_name.toUpperCase();
+          document.getElementById('footer-inst-name').innerText = data.institution_name.toUpperCase();
+        }
+        if (data.contact_phone) {
+          document.getElementById('advisor-phone').innerText = data.contact_phone;
+          document.getElementById('footer-contact').innerText = `Atención Oficial • WhatsApp / Tel: ${data.contact_phone}`;
+        }
+        if (data.contact_email) {
+          document.getElementById('advisor-email').innerText = data.contact_email;
+          document.getElementById('advisor-email-link').href = `mailto:${data.contact_email}`;
+        }
+        if (data.contact_hours) {
+          document.getElementById('advisor-hours').innerText = `Atención: ${data.contact_hours}`;
+        }
+
+        // 2. Render Dynamic Initial Query Chips in Assistant
+        renderQuickChips(data.quick_chips);
+
+        // 3. Render Dynamic Programs Grid
+        renderProgramsGrid(data.programs);
+
+        // 4. Render Dynamic Schedules Grid
+        renderSchedulesGrid(data.schedules);
+
+        // 5. Render Dynamic Campuses Grid
+        renderCampusesGrid(data.campuses);
+
+        lucide.createIcons();
+      } catch (err) {
+
+        console.error('Error loading dynamic catalog:', err);
+      }
+    }
+
+    // Render Quick Chips
+    function renderQuickChips(chips) {
+      const container = document.getElementById('initial-step-chips');
+      if (!chips || chips.length === 0) return;
+
+      container.innerHTML = chips.map(chip => `
+        <button onclick="executeGuidedQuery('${chip.query.replace(/'/g, "\\'")}')" class="bg-white hover:bg-primary-50 hover:border-primary-300 text-primary-900 border border-slate-200 px-3 py-1.5 rounded-xl text-xs font-semibold shadow-sm transition-all flex items-center gap-1.5">
+          <i data-lucide="${chip.icon || 'message-square'}" class="w-3.5 h-3.5 text-primary-600"></i>
+          <span>${chip.label}</span>
+        </button>
+      `).join('');
+      lucide.createIcons();
+    }
+
+    // Render Dynamic Programs Grid
+    function renderProgramsGrid(programs) {
+      const grid = document.getElementById('programs-grid');
+      if (!programs || programs.length === 0) {
+        grid.innerHTML = '<div class="col-span-3 text-center py-8 text-slate-400 text-xs">No se encontraron secciones de programas en los documentos cargados.</div>';
+        return;
+      }
+
+      grid.innerHTML = programs.map(p => `
+        <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-card flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between mb-3">
+              <span class="text-[11px] font-bold px-2 py-0.5 rounded bg-blue-50 text-primary-800 border border-blue-100">${p.badge || 'Oficial'}</span>
+              <span class="text-xs text-slate-400 font-medium">Disponible</span>
+            </div>
+            <h3 class="text-base font-bold text-navy-950">${p.title}</h3>
+            <p class="text-xs text-slate-500 mt-2 leading-relaxed">${p.overview}</p>
+            
+            ${p.highlights && p.highlights.length > 0 ? `
+              <div class="mt-4 pt-3 border-t border-slate-100 space-y-1.5 text-xs text-slate-600">
+                ${p.highlights.map(h => `<div class="flex items-center gap-1.5"><i data-lucide="check" class="w-3.5 h-3.5 text-emerald-600 shrink-0"></i> <span>${h}</span></div>`).join('')}
+              </div>
+            ` : ''}
+          </div>
+          <button onclick="askFromProgram('${p.query.replace(/'/g, "\\'")}')" class="mt-5 w-full bg-slate-50 hover:bg-primary-50 text-primary-800 font-bold text-xs py-2.5 rounded-xl border border-slate-200 transition-colors">
+            Preguntar al Asistente
+          </button>
+        </div>
+      `).join('');
+      lucide.createIcons();
+    }
+
+    // Render Dynamic Schedules Grid
+    function renderSchedulesGrid(schedules) {
+      const grid = document.getElementById('schedules-grid');
+      if (!schedules || schedules.length === 0) {
+        grid.innerHTML = '<div class="col-span-4 text-center py-8 text-slate-400 text-xs">No se encontraron secciones de horarios en los documentos cargados.</div>';
+        return;
+      }
+
+      grid.innerHTML = schedules.map(s => `
+        <div class="p-4 rounded-2xl bg-white border border-slate-200 shadow-card">
+          <div class="w-8 h-8 rounded-lg bg-blue-100 text-primary-800 flex items-center justify-center mb-2.5">
+            <i data-lucide="clock" class="w-4 h-4"></i>
+          </div>
+          <h3 class="font-bold text-sm text-navy-950">${s.title}</h3>
+          <p class="text-xs text-slate-500 mt-0.5">${s.subtitle || 'Jornada'}</p>
+          <div class="mt-2 text-xs font-semibold text-primary-800 space-y-1">
+            ${s.details.map(d => `<p>${d}</p>`).join('')}
+          </div>
+        </div>
+      `).join('');
+      lucide.createIcons();
+    }
+
+    // Render Dynamic Campuses Grid
+    function renderCampusesGrid(campuses) {
+      const grid = document.getElementById('campuses-grid');
+      if (!campuses || campuses.length === 0) {
+        grid.innerHTML = '<div class="col-span-2 text-center py-8 text-slate-400 text-xs">No se encontraron secciones de sedes en los documentos cargados.</div>';
+        return;
+      }
+
+      grid.innerHTML = campuses.map(c => `
+        <div class="bg-white border border-slate-200 rounded-2xl p-5 shadow-card">
+          <div class="flex items-center gap-3 mb-3">
+            <div class="w-9 h-9 rounded-xl bg-blue-100 text-primary-800 flex items-center justify-center font-bold">
+              <i data-lucide="map-pin" class="w-4 h-4"></i>
+            </div>
+            <div>
+              <h3 class="font-bold text-sm text-navy-950">${c.name}</h3>
+              <p class="text-xs text-slate-500">Sede Oficial</p>
+            </div>
+          </div>
+          <div class="space-y-2 text-xs text-slate-600 border-t border-slate-100 pt-3">
+            ${c.locations.map(l => `<p>📍 ${l}</p>`).join('')}
+            <p>⏰ <strong>Atención:</strong> ${c.hours || 'Lunes a Viernes 8:00 AM - 6:00 PM'}</p>
+          </div>
+        </div>
+      `).join('');
+      lucide.createIcons();
+    }
+
+    // Reset Chat to Initial State
+
+    function resetGuidedFlow() {
+      const container = document.getElementById('chat-messages');
+      container.innerHTML = `
+        <div class="flex items-start gap-3">
+          <div class="w-8 h-8 rounded-full bg-primary-100 text-primary-800 flex items-center justify-center shrink-0 mt-0.5 font-bold text-xs">
+            <i data-lucide="sparkles" class="w-4 h-4"></i>
+          </div>
+          <div class="flex-1 space-y-3">
+            <div class="bg-white border border-slate-200 rounded-2xl rounded-tl-none p-4 shadow-sm text-sm text-slate-700 leading-relaxed max-w-xl">
+              ¡Hola! Te doy la bienvenida. Estoy aquí para acompañarte y resolver cualquier duda sobre nuestros programas académicos, precios oficiales y horarios.
+              <br><br>
+              <strong>¿En qué te puedo orientar hoy?</strong>
+            </div>
+
+            <div id="initial-step-chips" class="flex flex-wrap gap-2 pt-1">
+              <!-- Chips injected dynamically -->
+            </div>
+          </div>
+        </div>
+      `;
+      if (globalCatalog && globalCatalog.quick_chips) {
+        renderQuickChips(globalCatalog.quick_chips);
+      }
+      lucide.createIcons();
+    }
+
+    function appendUserMessage(text) {
+      const container = document.getElementById('chat-messages');
+      const div = document.createElement('div');
+      div.className = 'flex justify-end';
+      div.innerHTML = `
+        <div class="bg-primary-800 text-white rounded-2xl rounded-tr-none px-4 py-2.5 max-w-lg text-xs sm:text-sm font-medium shadow-sm">
+          ${text}
+        </div>
+      `;
+      container.appendChild(div);
+      container.scrollTop = container.scrollHeight;
+    }
+
+    function appendAssistantAnswer(htmlContent, sources = [], escalated = false) {
+      const container = document.getElementById('chat-messages');
+      const div = document.createElement('div');
+      div.className = 'flex items-start gap-3';
+
+      let footerHtml = '';
+      if (escalated) {
+        footerHtml = `
+          <div class="mt-3 p-2.5 rounded-xl bg-amber-50 border border-amber-200 flex items-center justify-between text-xs text-amber-900">
+            <span class="font-semibold">¿Deseas hablar directamente con un asesor humano?</span>
+            <button onclick="openModal('advisor-modal')" class="bg-amber-800 hover:bg-amber-700 text-white font-bold px-2.5 py-1 rounded-lg text-xs">
+              Contactar
+            </button>
+          </div>
+        `;
+      } else {
+        footerHtml = `
+          <div class="mt-3 pt-2.5 border-t border-slate-100 flex flex-wrap items-center gap-1.5">
+            <button onclick="openModal('quote-modal')" class="text-xs bg-slate-100 hover:bg-slate-200 text-slate-700 px-2.5 py-1 rounded-lg font-semibold transition-colors">
+              💰 Cotizar Matrícula
+            </button>
+            <button onclick="openModal('advisor-modal')" class="text-xs bg-slate-100 hover:bg-slate-200 text-slate-700 px-2.5 py-1 rounded-lg font-semibold transition-colors">
+              👩‍💼 Hablar con Asesor
+            </button>
+          </div>
+        `;
+      }
+
+      div.innerHTML = `
+        <div class="w-8 h-8 rounded-full bg-primary-100 text-primary-800 flex items-center justify-center shrink-0 mt-0.5 font-bold text-xs">
+          <i data-lucide="sparkles" class="w-4 h-4"></i>
+        </div>
+        <div class="flex-1 bg-white border border-slate-200 rounded-2xl rounded-tl-none p-4 shadow-sm text-xs sm:text-sm text-slate-700 max-w-xl">
+          <div class="chat-markdown">${htmlContent}</div>
+          ${footerHtml}
+        </div>
+      `;
+      container.appendChild(div);
+      lucide.createIcons();
+      container.scrollTop = container.scrollHeight;
+    }
+
+    async function executeGuidedQuery(queryText) {
+      appendUserMessage(queryText);
+      const thinking = document.getElementById('chat-thinking');
+      thinking.classList.remove('hidden');
+
+      try {
+        const response = await fetch('/api/query', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ query: queryText })
+        });
+        if (!response.ok) {
+          const errData = await response.json().catch(() => ({}));
+          throw new Error(errData.detail || `Error HTTP ${response.status}`);
+        }
+        const data = await response.json();
+        appendAssistantAnswer(marked.parse(data.answer || ''), data.sources || [], data.escalated || false);
+      } catch (err) {
+        console.error('Query execution error:', err);
+        appendAssistantAnswer('Disculpa, ocurrió un error de conexión con el servidor. Por favor verifica que el backend esté en ejecución e intenta nuevamente.');
+      } finally {
+        thinking.classList.add('hidden');
+      }
+
+    }
+
+    function askFromProgram(text) {
+      navigateToView('view-assistant');
+      executeGuidedQuery(text);
+    }
+
+    function handleFreeTextQuery(e) {
+      e.preventDefault();
+      const input = document.getElementById('free-query-input');
+      const val = input.value.trim();
+      if (!val) return;
+      input.value = '';
+      executeGuidedQuery(val);
+    }
+
+    async function calculateQuote(e) {
+      e.preventDefault();
+      const program_type = document.getElementById('modal-quote-program').value;
+      const payment_plan = document.getElementById('modal-quote-plan').value;
+      const discount_code = document.getElementById('modal-quote-discount').value;
+
+      try {
+        const res = await fetch('/api/skills/quote', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ program_type, payment_plan, discount_code })
+        });
+        const data = await res.json();
+
+        document.getElementById('m-res-base').innerText = '$' + data.base_price_cop.toLocaleString('es-CO') + ' COP';
+        document.getElementById('m-res-disc').innerText = '-$' + data.discount_amount_cop.toLocaleString('es-CO') + ' COP (' + data.discount_applied + ')';
+        document.getElementById('m-res-total').innerText = '$' + data.final_price_cop.toLocaleString('es-CO') + ' COP';
+        document.getElementById('m-res-installments').innerText = 'Plan de pago: ' + data.installments_info;
+
+        document.getElementById('modal-quote-result').classList.remove('hidden');
+      } catch (err) {
+        alert('Error al calcular: ' + err.message);
+      }
+    }
+  </script>
+</body>
+</html>

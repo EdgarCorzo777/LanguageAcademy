@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: language-academy-assistant
+    runtime: python
+    buildCommand: "pip install -r requirements.txt && python generate_documents.py && python -m backend.src.ingestion"
+    startCommand: "uvicorn backend.src.main:app --host 0.0.0.0 --port $PORT"
+    envVars:
+      - key: GOOGLE_API_KEY
+        sync: false
+      - key: GEMINI_MODEL_NAME
+        value: gemini-3.5-flash-lite
+      - key: GEMINI_EMBEDDING_MODEL
+        value: gemini-embedding-001
+      - key: CACHE_ENABLED
+        value: "true"

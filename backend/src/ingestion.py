@@ -21,24 +21,39 @@ except ImportError:
 from langchain_community.vectorstores import Chroma
 import chromadb.utils.embedding_functions as ef
 
-from src.config import (
-    DATA_DIR,
-    VECTOR_DB_DIR,
-    EMBEDDING_PROVIDER,
-    GOOGLE_API_KEY,
-    GEMINI_EMBEDDING_MODEL,
-    OPENAI_API_KEY,
-    OPENAI_EMBEDDING_MODEL,
-    CHUNK_SIZE,
-    CHUNK_OVERLAP,
-)
+try:
+    from backend.src.config import (
+        DATA_DIR,
+        VECTOR_DB_DIR,
+        EMBEDDING_PROVIDER,
+        GOOGLE_API_KEY,
+        GEMINI_EMBEDDING_MODEL,
+        OPENAI_API_KEY,
+        OPENAI_EMBEDDING_MODEL,
+        CHUNK_SIZE,
+        CHUNK_OVERLAP,
+    )
+except ImportError:
+    from src.config import (
+        DATA_DIR,
+        VECTOR_DB_DIR,
+        EMBEDDING_PROVIDER,
+        GOOGLE_API_KEY,
+        GEMINI_EMBEDDING_MODEL,
+        OPENAI_API_KEY,
+        OPENAI_EMBEDDING_MODEL,
+        CHUNK_SIZE,
+        CHUNK_OVERLAP,
+    )
+
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 logger = logging.getLogger(__name__)
 
 
 class LocalMiniLMEmbeddings(Embeddings):
-    """Offline, local embeddings wrapper using Chroma's ONNX all-MiniLM-L6-v2."""
+    """Offline, multilingual-capable local embeddings wrapper using Chroma Default ONNX model."""
+
     def __init__(self):
         self.ef = ef.DefaultEmbeddingFunction()
 
@@ -50,38 +65,42 @@ class LocalMiniLMEmbeddings(Embeddings):
 
 
 def get_embedding_function() -> Embeddings:
-    """Instantiate the configured embedding function."""
-    if EMBEDDING_PROVIDER == "local":
-        logger.info("Using free local embeddings (all-MiniLM-L6-v2, runs offline).")
-        return LocalMiniLMEmbeddings()
-    elif EMBEDDING_PROVIDER == "gemini":
-        if not GOOGLE_API_KEY:
-            raise ValueError("GOOGLE_API_KEY is not set. Please provide a valid Gemini API key in .env.")
-        from langchain_google_genai import GoogleGenerativeAIEmbeddings
-        logger.info(f"Using Google Gemini Embeddings ({GEMINI_EMBEDDING_MODEL})")
-        return GoogleGenerativeAIEmbeddings(
-            model=GEMINI_EMBEDDING_MODEL,
-            google_api_key=GOOGLE_API_KEY,
-        )
-    elif EMBEDDING_PROVIDER == "openai":
-        if not OPENAI_API_KEY:
-            raise ValueError("OPENAI_API_KEY is not set in .env.")
-        from langchain_openai import OpenAIEmbeddings
-        logger.info(f"Using OpenAI Embeddings ({OPENAI_EMBEDDING_MODEL})")
-        return OpenAIEmbeddings(
-            openai_api_key=OPENAI_API_KEY,
-            model=OPENAI_EMBEDDING_MODEL,
-        )
+    """Instantiate the configured embedding function with cross-lingual multilingual support."""
+    if (EMBEDDING_PROVIDER == "gemini" or GOOGLE_API_KEY) and GOOGLE_API_KEY:
+        try:
+            from langchain_google_genai import GoogleGenerativeAIEmbeddings
+            emb_model = GEMINI_EMBEDDING_MODEL if GEMINI_EMBEDDING_MODEL else "models/text-embedding-004"
+            logger.info(f"Using Google Gemini Multilingual Embeddings ({emb_model})")
+            return GoogleGenerativeAIEmbeddings(
+                model=emb_model,
+                google_api_key=GOOGLE_API_KEY,
+            )
+        except Exception as e:
+            logger.warning(f"Failed to initialize Gemini embeddings ({e}), falling back to local embeddings.")
+            return LocalMiniLMEmbeddings()
+
+    elif EMBEDDING_PROVIDER == "openai" and OPENAI_API_KEY:
+        try:
+            from langchain_openai import OpenAIEmbeddings
+            logger.info(f"Using OpenAI Embeddings ({OPENAI_EMBEDDING_MODEL})")
+            return OpenAIEmbeddings(
+                openai_api_key=OPENAI_API_KEY,
+                model=OPENAI_EMBEDDING_MODEL,
+            )
+        except Exception as e:
+            logger.warning(f"Failed to initialize OpenAI embeddings ({e}), falling back to local.")
+            return LocalMiniLMEmbeddings()
+
     else:
-        logger.info("Defaulting to free local embeddings (all-MiniLM-L6-v2).")
+        logger.info("Using local multilingual embeddings.")
         return LocalMiniLMEmbeddings()
 
 
 def load_documents(data_dir: str = str(DATA_DIR)) -> List[Document]:
-    """Load all markdown and text documents from the specified data directory."""
+    """Load markdown and text business documents from the specified data directory."""
     documents: List[Document] = []
     supported_patterns = [os.path.join(data_dir, "*.md"), os.path.join(data_dir, "*.txt")]
-    
+
     file_paths = []
     for pattern in supported_patterns:
         file_paths.extend(glob.glob(pattern))
@@ -100,7 +119,7 @@ def load_documents(data_dir: str = str(DATA_DIR)) -> List[Document]:
                     metadata={"source": filename, "file_path": file_path},
                 )
                 documents.append(doc)
-                logger.info(f"Loaded document: {filename} ({len(content)} characters)")
+                logger.info(f"Loaded business document: {filename} ({len(content)} characters)")
         except Exception as e:
             logger.error(f"Error loading file {file_path}: {e}")
 
@@ -112,14 +131,14 @@ def split_documents(
     chunk_size: int = CHUNK_SIZE,
     chunk_overlap: int = CHUNK_OVERLAP,
 ) -> List[Document]:
-    """Split documents into overlapping chunks for semantic retrieval."""
+    """Split documents into semantic overlapping chunks."""
     text_splitter = RecursiveCharacterTextSplitter(
         chunk_size=chunk_size,
         chunk_overlap=chunk_overlap,
         separators=["\n## ", "\n### ", "\n\n", "\n", ". ", " "],
     )
     chunks = text_splitter.split_documents(documents)
-    logger.info(f"Split {len(documents)} documents into {len(chunks)} chunks.")
+    logger.info(f"Split {len(documents)} documents into {len(chunks)} chunks with overlap={chunk_overlap}.")
     return chunks
 
 

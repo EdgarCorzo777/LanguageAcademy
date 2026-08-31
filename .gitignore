@@ -17,6 +17,9 @@ chroma_db/
 *.db
 *.sqlite3
 
+# Telemetry and Local Data
+metrics.json
+
 # IDEs and OS
 .vscode/
 .idea/

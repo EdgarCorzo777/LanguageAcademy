@@ -1,38 +1,69 @@
-# University Admissions & Pricing Policy
+# Admissions, Tuition Pricing and Payment Troubleshooting - Language Academy (Tarifas en COP)
 
-## 1. Application and Admissions Process
-- **Eligibility**: Applicants must be at least 18 years old (or 17 with parental consent) and hold a high school diploma or equivalent secondary education credential.
-- **Application Steps**:
-  1. Complete the online application form on the university admissions portal.
-  2. Upload valid government-issued photo ID and high school diploma / transcripts.
-  3. Complete the online logical reasoning and basic technical aptitude assessment (duration: 45 minutes, minimum passing score: 70%).
-  4. Attend a 20-minute motivational interview with an admissions counselor.
-  5. Receive official admission status notification via email within 3 business days.
+## 1. Official Tuition Rates in Colombian Pesos (COP)
 
-## 2. Tuition and Program Pricing
-- **AI Engineering Program**:
-  - Full Upfront Payment: $3,200 USD.
-  - Installment Plan: $850 USD per month for 4 months (Total: $3,400 USD).
-  - Income Share Agreement (ISA): 12% of gross monthly salary after securing a tech job earning at least $1,500 USD/month, capped at $4,500 USD.
-- **Full-Stack Web Development Program**:
-  - Full Upfront Payment: $2,800 USD.
-  - Installment Plan: $750 USD per month for 4 months (Total: $3,000 USD).
-- **Data Science & Analytics Program**:
-  - Full Upfront Payment: $3,000 USD.
-  - Installment Plan: $800 USD per month for 4 months (Total: $3,200 USD).
-- **Cloud & Cybersecurity Program**:
-  - Full Upfront Payment: $3,100 USD.
-  - Installment Plan: $825 USD per month for 4 months (Total: $3,300 USD).
+### 1.1 Standard Language Programs (English, French, German, Italian, Portuguese)
+- Price per Academic Level (16 weeks / 96 instructional hours):
+  - Upfront Single Payment (Pago de Contado): $1,450,000 COP per level.
+  - Installment Plan (Plan Financiado en Cuotas): Total of $1,580,000 COP, divided into 4 monthly installments of $395,000 COP (0% interest rate applied).
+- Included Materials: Access to digital campus, interactive e-book, multimedia conversational labs, and certificate of completion.
 
-## 3. Scholarships and Discounts
-- **Early Bird Discount**: 15% discount for registrations completed at least 30 days before the cohort start date.
-- **Women in Tech Scholarship**: 25% tuition waiver for qualified female applicants in software and AI disciplines.
-- **Partner Community Discount**: 10% discount for members of affiliated tech communities and alumni referrals.
-- *Note: Discounts and scholarships cannot be combined.*
+### 1.2 Intensive Immersion Track (Track Intensivo)
+- Price per Academic Level (8 weeks / 96 intensive hours):
+  - Upfront Single Payment: $1,650,000 COP per level.
+  - Installment Plan: Total of $1,750,000 COP in 2 monthly installments of $875,000 COP.
 
-## 4. Payment Methods and Refund Policy
-- **Accepted Payment Methods**: Credit/Debit card (Visa, Mastercard, American Express), Bank Wire Transfer, PayPal, and local bank transfers in supported countries.
-- **Refund Policy**:
-  - 100% refund (minus a $50 administrative fee) if cancellation is requested before the first day of classes.
-  - 75% refund if cancellation is requested during the first week of classes.
-  - No refunds are issued after the completion of the second week of classes.
+### 1.3 Business English Specialization (Ingles Corporativo)
+- Total Module Cost (12 weeks / 48 instructional hours):
+  - Upfront Single Payment: $1,200,000 COP.
+  - Installment Plan: Total of $1,290,000 COP in 3 monthly installments of $430,000 COP.
+
+### 1.4 International Exam Preparation Modules (IELTS / TOEFL / DELF / Goethe)
+- 8-Week Workshop (32 instructional hours + 3 full computer simulation mocks):
+  - Cost: $850,000 COP (Does not include the official examination registration fee paid to test centers).
+
+---
+
+## 2. Institutional Discounts and Strategic Partnerships (Convenios y Descuentos)
+
+### 2.1 Cajas de Compensacion Familiar (Official Colombian Benefit Plans)
+- Compensar:
+  - Category A Members: 20% discount on standard upfront tuition ($1,160,000 COP final price).
+  - Category B Members: 15% discount on standard upfront tuition ($1,232,500 COP final price).
+  - Category C Members: 5% discount ($1,377,500 COP final price).
+- Colsubsidio: 20% discount for Category A and B affiliated workers.
+- Comfama / Comfenalco (Antioquia region): 20% discount for Category A affiliates.
+
+### 2.2 Early Bird Discount (Descuento por Pronto Pago)
+- 15% discount on any program when registering and paying at least 15 calendar days before the official cohort start date.
+
+### 2.3 University Student & Youth Agreement
+- Active university or technical institute students with valid student ID card receive a 10% discount on all language tracks.
+
+### 2.4 Family and Multi-Language Benefit
+- 10% discount for second family member enrolled or when enrolling simultaneously in a second foreign language.
+
+---
+
+## 3. Payment Methods and Troubleshooting Electronic Transactions (Solucion de Problemas con Pagos)
+
+### 3.1 Accepted Payment Channels
+- Electronic: PSE (Pagos Seguros en Linea), Nequi, Daviplata, Credit and Debit Cards (Visa, Mastercard, American Express).
+- Physical: Direct deposit at Bancolombia and Banco de Bogota, or cash/card at campus offices in Bogota and Medellin.
+
+### 3.2 Resolving Declined Payments via PSE or Credit Card (Pago Rechazado por PSE)
+- Common Reasons and Immediate Solutions:
+  1. Daily Transfer Limit in Banking App: Most Colombian banks (Bancolombia, Davivienda, BBVA, Banco de Bogota) have default daily transfer limits of $1,000,000 COP for PSE. If your level fee is $1,450,000 COP, log into your banking app and temporarily raise your PSE daily transaction limit.
+  2. Alternative Immediate Option: Choose the 4-installment plan ($395,000 COP/month) which easily falls below any bank transfer limit, or pay via Nequi / Daviplata QR transfer.
+  3. Browser Pop-up Blocker: PSE opens a redirect window. Ensure pop-ups are allowed or try an incognito window.
+
+### 3.3 Money Debited from Bank Account Without Confirmation (Debito sin Confirmacion)
+- Verification Process:
+  - Banking networks occasionally delay payment status notifications by 15 to 45 minutes.
+  - If money was debited from your account, take a screenshot or download the transfer voucher (comprobante con numero CUS / aprobacion).
+  - Send the voucher via WhatsApp to +57 (300) 123-4567 or email to admisiones@languageacademy.edu.co with your full name and ID number.
+  - Admissions accounting manually activates your enrollment within 2 business hours.
+
+### 3.4 Electronic Invoicing and Company Billing (Facturacion Electronica con RUT)
+- Send your company RUT and payment confirmation to admisiones@languageacademy.edu.co.
+- Invoices compliant with DIAN regulations are issued within 24 business hours.

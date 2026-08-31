@@ -1,0 +1,631 @@
+Quiero que rediseñes completamente la interfaz de esta página web.
+
+IMPORTANTE:
+No quiero un simple cambio de colores, bordes, sombras o tipografías.
+Quiero un REDISEÑO REAL de UX/UI y de la estructura de la interfaz.
+
+Actúa como un Senior Product Designer + Senior UX/UI Designer + Senior Frontend Engineer especializado en plataformas educativas, EdTech y experiencias conversacionales.
+
+La página pertenece a una academia colombiana de idiomas llamada:
+
+LINGOCOLOMBIA
+Academia Colombiana de Idiomas
+
+El objetivo principal de la página es funcionar como un ASISTENTE DIGITAL DE ADMISIONES para estudiantes interesados en estudiar idiomas.
+
+La plataforma permite consultar:
+- Programas de Inglés, Francés, Alemán, Italiano y Portugués.
+- Precios oficiales en pesos colombianos (COP).
+- Modalidades de pago.
+- Descuentos y convenios, especialmente Compensar.
+- Horarios.
+- Sedes en Bogotá y Medellín.
+- Certificaciones.
+- Requisitos o información de admisión.
+- Orientación sobre qué programa elegir.
+- Información sobre matrículas.
+- Posibilidad de escalar la conversación a un asesor humano.
+
+La interfaz actual parece demasiado genérica, como un dashboard administrativo o una aplicación SaaS de IA.
+NO quiero ese enfoque.
+
+Quiero que el resultado se sienta como el sitio web de una institución educativa colombiana REAL, moderna, confiable y profesional.
+
+==================================================
+1. CONCEPTO GENERAL
+==================================================
+
+Diseña la experiencia alrededor del concepto:
+
+"Tu asistente de admisiones para aprender idiomas."
+
+La interfaz debe transmitir:
+
+- Educación
+- Confianza
+- Cercanía
+- Profesionalismo
+- Internacionalización
+- Aprendizaje de idiomas
+- Acompañamiento
+- Tecnología utilizada de manera discreta
+
+La IA NO debe ser el protagonista visual.
+
+El protagonista debe ser EL ESTUDIANTE y su proceso para encontrar el programa adecuado.
+
+Evita que parezca:
+- Un chatbot genérico.
+- Un dashboard empresarial.
+- Una herramienta para desarrolladores.
+- Una landing page genérica de inteligencia artificial.
+- Un panel lleno de cards.
+- Un template de SaaS.
+
+==================================================
+2. NUEVA ARQUITECTURA UX
+==================================================
+
+No coloques toda la información en pantalla al mismo tiempo.
+
+Quiero una experiencia progresiva.
+
+La página debe tener una jerarquía clara:
+
+1. Header institucional.
+2. Hero / bienvenida.
+3. Asistente de admisiones como experiencia principal.
+4. Accesos rápidos relacionados con las necesidades más comunes.
+5. Información contextual que aparece cuando el usuario la necesita.
+6. Acciones secundarias como cotizador, sedes, horarios y certificaciones.
+7. Contacto / asesor humano.
+
+La interfaz debe reducir considerablemente la cantidad de elementos visibles simultáneamente.
+
+Utiliza progressive disclosure.
+
+El usuario no debería sentirse frente a un formulario enorme.
+
+==================================================
+3. HEADER
+==================================================
+
+Crear un header institucional mucho más elegante.
+
+Debe incluir:
+
+- Logo / nombre LingoColombia.
+- Texto secundario: "Academia Colombiana de Idiomas".
+- Navegación sencilla:
+  Programas
+  Horarios
+  Sedes
+  Precios
+- Botón destacado:
+  "Hablar con un asesor"
+
+Evita colocar elementos técnicos como:
+
+"Base Vectorial Conectada"
+"Swagger API"
+"Métricas"
+
+Esos elementos son útiles para desarrolladores, pero NO pertenecen a la experiencia del estudiante.
+
+Si necesitas conservarlos para desarrollo, déjalos fuera de la interfaz pública.
+
+==================================================
+4. HERO
+==================================================
+
+Crear una sección inicial mucho más humana y educativa.
+
+En lugar de:
+
+"Asistente de Admisiones, Horarios y Matrículas"
+
+utiliza un mensaje orientado al usuario, por ejemplo:
+
+"Encuentra el idioma y programa ideal para ti"
+
+Subtítulo:
+
+"Consulta programas, horarios, precios y opciones de financiación con nuestro asistente de admisiones."
+
+Agregar una llamada a la acción principal:
+
+"Comenzar consulta"
+
+Y una secundaria:
+
+"Ver programas"
+
+La sección debe tener una composición visual atractiva relacionada con el aprendizaje de idiomas.
+
+Puedes utilizar elementos visuales sutiles relacionados con:
+- conversación
+- idiomas
+- estudiantes
+- aprendizaje
+- internacionalización
+
+NO utilices gráficos futuristas de IA, cerebros digitales, robots o circuitos.
+
+==================================================
+5. ASISTENTE DE ADMISIONES
+==================================================
+
+Esta debe ser la sección MÁS IMPORTANTE de toda la página.
+
+No debe parecer un textarea gigante.
+
+Debe parecer una conversación guiada y moderna.
+
+Ejemplo conceptual:
+
+-----------------------------------------
+
+👋 Hola, soy tu asistente de admisiones.
+
+Estoy aquí para ayudarte a encontrar el programa adecuado.
+
+¿Qué estás buscando?
+
+[ Quiero aprender inglés ]
+
+[ Quiero aprender otro idioma ]
+
+[ Consultar precios ]
+
+[ Ver horarios ]
+
+[ Conocer los programas ]
+
+-----------------------------------------
+
+Después de seleccionar una opción, la interfaz debe continuar de manera conversacional.
+
+Por ejemplo:
+
+"Perfecto. ¿Qué idioma te interesa?"
+
+[ Inglés ]
+[ Francés ]
+[ Alemán ]
+[ Italiano ]
+[ Portugués ]
+
+Después:
+
+"¿Cuál es tu objetivo?"
+
+[ Trabajo ]
+[ Estudios ]
+[ Viajes ]
+[ Crecimiento personal ]
+[ Certificación ]
+
+La experiencia debe sentirse como un asistente real de admisiones.
+
+No obligues al usuario a escribir una pregunta si puede resolver su necesidad mediante opciones.
+
+Aun así, debe existir un campo:
+
+"También puedes escribir tu pregunta..."
+
+La interfaz debe permitir conversación libre cuando sea necesario.
+
+==================================================
+6. RESPUESTAS DE LA IA
+==================================================
+
+Cuando el asistente responda, NO muestres bloques enormes de texto.
+
+Divide la información en pequeñas secciones visuales.
+
+Por ejemplo:
+
+"Para tu objetivo, te recomiendo:"
+
+[ Inglés Estándar ]
+
+16 semanas
+96 horas
+
+Modalidad:
+Presencial / Virtual
+
+Desde:
+$XXX.XXX COP
+
+[ Ver horarios ]
+[ Calcular matrícula ]
+
+Las respuestas deben utilizar:
+
+- Jerarquía tipográfica.
+- Información resumida.
+- Chips.
+- Badges.
+- Botones contextuales.
+- Cards pequeñas únicamente cuando aporten valor.
+
+No convertir cada elemento en una card innecesaria.
+
+==================================================
+7. ACCESOS RÁPIDOS
+==================================================
+
+En lugar de colocar 6-8 botones pequeños juntos, utilizar una sección más limpia:
+
+"¿Qué necesitas consultar?"
+
+Mostrar únicamente 4 opciones principales:
+
+💰 Precios y matrícula
+📅 Horarios
+📍 Sedes
+🎓 Programas
+
+Y debajo una opción secundaria:
+
+"Más opciones"
+
+Al pulsarla pueden aparecer:
+- Certificaciones
+- Descuentos
+- Convenios
+- Requisitos
+- Métodos de pago
+
+Esto evita saturar la pantalla.
+
+==================================================
+8. COTIZADOR
+==================================================
+
+NO mostrar permanentemente el calculador completo al lado del asistente.
+
+Debe abrirse como una experiencia contextual.
+
+Puede ser:
+
+- Modal elegante.
+- Drawer lateral.
+- Stepper.
+- Panel expandible.
+
+El usuario selecciona:
+
+1. Programa
+2. Modalidad
+3. Forma de pago
+4. Descuento / convenio
+
+Y finalmente:
+
+"Tu inversión estimada"
+
+$XXX.XXX COP
+
+Mostrar claramente:
+
+Valor del programa
+Descuento aplicado
+Valor final
+
+Agregar:
+
+"Consultar con un asesor"
+
+El precio debe ser visualmente importante.
+
+==================================================
+9. HORARIOS
+==================================================
+
+Los horarios deben tener una experiencia mucho más visual.
+
+No mostrar simplemente una lista de texto.
+
+Permitir filtrar:
+
+Idioma
+Modalidad
+Sede
+Día
+Nivel
+
+Después mostrar los horarios disponibles de forma limpia.
+
+Ejemplo:
+
+INGLÉS
+Nivel A2
+
+📍 Bogotá
+🗓 Lunes - Miércoles
+⏰ 6:00 PM - 8:00 PM
+
+[Consultar disponibilidad]
+
+==================================================
+10. SEDES
+==================================================
+
+Crear una sección de sedes mucho más institucional.
+
+Mostrar:
+
+Bogotá
+Medellín
+
+Con:
+- dirección
+- horarios de atención
+- modalidad
+- información de contacto
+
+Puedes utilizar una pequeña visualización de mapa o representación geográfica si resulta apropiado.
+
+No utilizar mapas gigantes que distraigan.
+
+==================================================
+11. ASESOR HUMANO
+==================================================
+
+La posibilidad de hablar con una persona debe ser visible pero NO invasiva.
+
+Utilizar un bloque como:
+
+"¿Prefieres hablar con una persona?"
+
+"Nuestro equipo de admisiones puede ayudarte."
+
+[ Hablar con un asesor ]
+
+Debe transmitir confianza.
+
+Evita que parezca un mensaje de soporte técnico.
+
+==================================================
+12. DISEÑO VISUAL
+==================================================
+
+Quiero abandonar completamente el estilo actual de:
+
+- fondo azul casi negro
+- demasiadas cards
+- bordes brillantes
+- aspecto de dashboard
+- exceso de elementos pequeños
+- estética SaaS
+- apariencia de herramienta para desarrolladores
+
+Quiero una estética:
+
+INSTITUCIONAL + EDUCATIVA + MODERNA + HUMANA + PREMIUM.
+
+Inspiración conceptual:
+
+Universidad moderna
+Academia internacional
+EdTech premium
+Escuela de idiomas contemporánea
+
+La interfaz debe sentirse como una institución educativa seria.
+
+==================================================
+13. COLOR
+==================================================
+
+Utiliza una paleta inspirada en educación e internacionalización.
+
+Preferir:
+
+- Azul institucional como color principal.
+- Blanco / tonos claros para superficies.
+- Azul oscuro para textos importantes.
+- Un color de acento cálido para llamadas a la acción.
+- Tonos suaves para backgrounds secundarios.
+
+No utilizar un fondo completamente negro.
+
+La interfaz debe tener aire y espacio.
+
+Debe sentirse luminosa, profesional y accesible.
+
+==================================================
+14. TIPOGRAFÍA
+==================================================
+
+Utiliza una tipografía moderna y profesional.
+
+La jerarquía debe ser muy clara:
+
+H1 grande y memorable.
+H2 claros.
+Texto de apoyo pequeño.
+Botones fáciles de identificar.
+
+Evita utilizar demasiados tamaños de fuente.
+
+==================================================
+15. ESPACIADO
+==================================================
+
+Aumenta considerablemente el whitespace.
+
+No intentes llenar toda la pantalla.
+
+Quiero que cada sección tenga espacio para respirar.
+
+La interfaz debe sentirse organizada incluso cuando haya bastante información.
+
+==================================================
+16. RESPONSIVE DESIGN
+==================================================
+
+Diseñar Mobile First.
+
+La experiencia móvil debe ser excelente.
+
+En mobile:
+
+- No utilizar layouts de dos columnas.
+- El asistente debe ocupar el protagonismo.
+- Los botones deben ser grandes y fáciles de tocar.
+- Las opciones deben poder seleccionarse cómodamente.
+- El cotizador debe convertirse en un modal o drawer.
+- Las secciones secundarias deben colapsarse.
+
+En desktop utilizar una composición más amplia, pero manteniendo el foco en el asistente.
+
+==================================================
+17. MICROINTERACCIONES
+==================================================
+
+Agregar microinteracciones profesionales y discretas:
+
+- Hover states.
+- Transiciones suaves.
+- Animación al aparecer nuevas respuestas.
+- Loading state del asistente.
+- Indicador "El asistente está pensando..."
+- Estados disabled.
+- Feedback al seleccionar opciones.
+- Transiciones entre pasos.
+
+NO utilizar animaciones exageradas.
+
+==================================================
+18. ESTADOS DEL ASISTENTE
+==================================================
+
+Diseñar correctamente:
+
+Estado inicial:
+Bienvenida + opciones.
+
+Estado conversacional:
+Mensajes del usuario + asistente.
+
+Estado de búsqueda:
+"Estoy consultando la información oficial..."
+
+Estado de resultados:
+Información estructurada.
+
+Estado sin resultados:
+"No encontré información suficiente..."
+
+Estado de escalamiento:
+"Esta consulta requiere la ayuda de un asesor."
+
+Estado de error:
+Mensaje claro y acción para reintentar.
+
+==================================================
+19. CONFIANZA Y TRANSPARENCIA
+==================================================
+
+Como se trata de información académica y precios, la interfaz debe transmitir confianza.
+
+Agregar discretamente:
+
+"Información basada en documentos oficiales de LingoColombia."
+
+Y cuando corresponda:
+
+"Última actualización de información"
+
+No utilizar términos técnicos como:
+RAG
+Embeddings
+Vector Database
+Swagger
+API
+Base Vectorial
+
+Esos conceptos pertenecen al backend y NO a la experiencia del estudiante.
+
+==================================================
+20. TECNOLOGÍA
+==================================================
+
+Mantén la aplicación funcional.
+
+No sacrifiques funcionalidad por diseño.
+
+Utiliza:
+
+HTML
+CSS / Tailwind CSS
+JavaScript
+
+o el stack existente del proyecto.
+
+La interfaz debe ser modular y mantenible.
+
+Crear componentes reutilizables para:
+
+- Header
+- Hero
+- Chat Assistant
+- Quick Actions
+- Program Card
+- Schedule Card
+- Price Summary
+- Campus Card
+- Human Advisor CTA
+- Modal / Drawer
+- Loading states
+- Empty states
+
+==================================================
+21. REGLA PRINCIPAL DE UX
+==================================================
+
+NO QUIERO QUE SIMPLEMENTE REORGANICES LAS CARDS EXISTENTES.
+
+Quiero que cuestiones la estructura actual y la rediseñes desde cero.
+
+Antes de implementar piensa:
+
+"¿Qué necesita hacer un estudiante cuando entra a esta página?"
+
+La respuesta debe ser:
+
+1. Entender qué puede hacer aquí.
+2. Empezar fácilmente una consulta.
+3. Recibir orientación.
+4. Obtener información concreta.
+5. Poder continuar hacia matrícula o contacto con un asesor.
+
+La interfaz debe guiar al usuario en ese recorrido.
+
+==================================================
+22. RESULTADO ESPERADO
+==================================================
+
+El resultado final debe parecer un producto real desarrollado por un equipo senior de:
+
+UX/UI
+Product Design
+Frontend Engineering
+
+y no una interfaz generada automáticamente a partir de componentes genéricos.
+
+Debe sentirse como:
+
+"El portal digital de admisiones de una academia colombiana de idiomas moderna."
+
+No como:
+
+"Un dashboard de una IA."
+
+Prioriza:
+
+UX > claridad > confianza > accesibilidad > estética > tecnología.
+
+La IA debe estar presente como herramienta de acompañamiento, pero la institución educativa y el estudiante deben ser el centro de la experiencia.

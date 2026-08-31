@@ -1,110 +1,153 @@
-# 🎓 TechUni AI Admissions Assistant (RAG with Python & Telegram)
+# Language Academy AI Admissions Assistant (Multilingual RAG with Python, Gemini & Web Form)
 
-An intelligent University Admissions Assistant powered by **Retrieval-Augmented Generation (RAG)** in Python, exposing a **FastAPI** backend and direct **Telegram Bot** channel integration. The assistant responds accurately to prospective students' inquiries regarding schedules, tuition, program levels, admissions requirements, certifications, and modalities, strictly adhering to internal business documents and escalating out-of-scope questions to human staff.
+An enterprise-grade customer support assistant designed for a **Colombian Language Academy** (*Academia de Idiomas*). The system is built with **Retrieval-Augmented Generation (RAG)** in Python, combining **FastAPI**, **ChromaDB**, **Google Gemini**, and a responsive **Web Form UI**.
 
----
-
-## 📌 Features
-
-- **Document Grounding (RAG)**: Ingests, chunks, and indexes official business documents into **ChromaDB** using vector embeddings.
-- **Strict Anti-Hallucination**: System prompt designed with brand guidelines, anti-hallucination restrictions, and **3 few-shot examples**.
-- **Human Escalation Workflow**: Automatically detects out-of-scope questions or missing information, routing the user to human admissions counselors with direct contact details.
-- **Dual Channels**:
-  - **Telegram Bot** (`python-telegram-bot`) for direct prospective student messaging.
-  - **REST API** (`FastAPI`) with `/api/query`, `/api/ingest`, and `/health` endpoints.
-- **Production-Ready & Modular**: Clean separation of concerns (`config`, `ingestion`, `rag_engine`, `bot`, `main`).
+The assistant automatically handles inquiries regarding **language programs, levels (CEFR), schedules, tuition in Colombian Pesos (COP), payment plans, international certifications, and campus modalities**, while strictly adhering to business documents, supporting cross-lingual semantic queries, and escalating out-of-scope requests to human advisors.
 
 ---
 
-## 🏛️ System Architecture
+## Key Highlights & Features
+
+1. **Interactive Web Form Interface (`frontend/index.html`)**:
+   - Modern, responsive Single Page Application (SPA) served directly at `http://localhost:8000/`.
+   - Clean view navigation across Assistant, Programs, Schedules, and Campuses.
+   - Dedicated contextual modals for **Tuition Quotation Calculator (COP)** and **Direct Human Advisor Contact**.
+
+2. **Procedural Document Generation & Knowledge Base (`generate_documents.py`)**:
+   - Generates 3 comprehensive, realistic business documents in `data/`:
+     - `programs_and_levels.md`: English, French, German, Italian, Portuguese tracks, CEFR levels (A1 to C2), placement test details, age requirements, and included materials.
+     - `admissions_and_pricing.md`: Official tuition rates in COP, installment options, corporate discounts (Compensar, Colsubsidio, Comfama), and payment troubleshooting (PSE daily transfer limits, banking vouchers, corporate electronic invoicing).
+     - `schedules_and_certifications.md`: Shifts, physical campuses in Bogotá and Medellín, live online class access troubleshooting (missing Zoom/Meet links, spam folder, student portal, WhatsApp groups), freezing policies, and refunds.
+
+3. **Zero-Latency Intent Router (`backend/src/intent_router.py`)**:
+   - Classifies conversational intents locally in `< 1 ms` (greetings with typos like `"ola"`, user disinterest/rejection, farewells, gratitude, inappropriate/troll filters, and explicit human requests).
+   - Responds instantly with `$0.00` API cost and 0 token consumption for common conversational flows.
+
+4. **Multilingual & Cross-Lingual Semantic Retrieval**:
+   - Powered by Google Gemini multilingual embeddings (`gemini-embedding-001`).
+   - Concepts in different languages share the same high-dimensional semantic vector space.
+
+5. **Proactive Troubleshooting & Anti-Saturating Support**:
+   - Solves payment errors (PSE transfer limits, Nequi/Daviplata vouchers), platform links, and admissions rules autonomously.
+   - Restricts human advisor escalation strictly to legitimate edge cases (critical billing disputes, custom enterprise contracts) or explicit human contact requests, eliminating admissions desk saturation.
+
+6. **Operational Telemetry & Cost Metrics (Bonus Feature)**:
+   - Tracks total queries processed, cache hit rate, escalation rate, token usage, and accumulated financial cost in USD.
+   - Accessible via `GET /api/metrics` and the live telemetry API.
+
+7. **Dual-Tier Response Cache (Bonus Feature)**:
+   - Exact hash cache + Semantic similarity cache (cosine similarity >= 0.92).
+   - Reduces response latency to < 1 ms and API cost to $0.00 for repeated or semantically equivalent questions.
+
+8. **Custom Skills & MCP Server (Bonus Feature)**:
+   - Tuition quotation calculator with discounts (`/api/skills/quote`).
+   - Free placement test scheduling (`/api/skills/placement`).
+   - Model Context Protocol (MCP) server in `backend/src/mcp_server.py`.
+
+9. **Cloud & Container Ready (Bonus Feature)**:
+   - Includes `Dockerfile`, `docker-compose.yml`, `render.yaml`, and `Procfile`.
+
+---
+
+## System Architecture
 
 ```
-                                  +-----------------------+
-                                  | Business Documents    |
-                                  | (data/*.md, *.txt)    |
-                                  +-----------+-----------+
-                                              |
-                                              v (Ingestion & Chunking)
-                                  +-----------------------+
-                                  | OpenAI Embeddings     |
-                                  +-----------+-----------+
-                                              |
-                                              v
-+------------------+              +-----------------------+
-|  Telegram User   | <----+       | Vector DB (ChromaDB)  |
-+------------------+      |       +-----------+-----------+
-                          |                   |
-                          v                   v (Semantic Search)
-                  +---------------+   +---------------+
-                  | Telegram Bot  |-->|  RAG Engine   |
-                  |  (python-tg)  |   | (LangChain +  |
-                  +---------------+   |  OpenAI LLM)  |
-                          ^           +-------+-------+
-                          |                   |
-+------------------+      |                   v
-| HTTP / REST API  |------+           +---------------+
-| (FastAPI /docs)  |                  | In Scope?     |
-+------------------+                  +-------+-------+
-                                       /             \
-                                (Yes) /               \ (No)
-                                     v                 v
-                          +---------------+   +-------------------+
-                          | Factual Brand |   | Human Escalation  |
-                          | Admissions    |   | Contact Details   |
-                          | Response      |   | (Email & Phone)   |
-                          +---------------+   +-------------------+
+                                +-----------------------------------+
+                                |     Business Markdown Docs        |
+                                |       (data/*.md in COP)          |
+                                +-----------------+-----------------+
+                                                  |
+                                                  v (Chunking with Overlap)
+                                +-----------------------------------+
+                                |    Gemini Multilingual Embeddings |
+                                |      (gemini-embedding-001)       |
+                                +-----------------+-----------------+
+                                                  |
+                                                  v
++------------------+            +-----------------------------------+
+|  Student / Lead  | <----+     |       ChromaDB Vector Store       |
++------------------+      |     +-----------------+-----------------+
+        |                 |                       |
+        v                 |                       v (Semantic Search)
++------------------+      |               +---------------+
+| Web Form (UI) /  |----->+-------------->|  RAG Engine   |
+| REST API Client  |                      | (LangChain +  |
+| (FastAPI :8000)  |                      |  Gemini LLM)  |
++------------------+                      +-------+-------+
+                                                  |
+                                                  v
+                                          +---------------+
+                                          | Scope Filter  |
+                                          +-------+-------+
+                                           /             \
+                                    (Yes) /               \ (No / Inappropriate)
+                                         v                 v
+                              +------------------+  +-------------------+
+                              | Factual Response |  | Scope Boundary /  |
+                              | in User Language |  | Human Escalation  |
+                              +------------------+  +-------------------+
 ```
 
 ---
 
-## 📂 Project Structure
+## Project Structure
 
 ```
-Simulacro PruebaDesempeño/
-├── data/                                 # Official business documents
-│   ├── admissions_and_pricing.md        # Tuition, fees, scholarships, refund policies
-│   ├── programs_and_levels.md           # Academic programs, curriculums, levels
-│   └── schedules_and_certifications.md  # Schedules, modalities, diplomas & certifications
-├── src/
-│   ├── __init__.py
-│   ├── config.py                        # Centralized configuration & environment loader
-│   ├── ingestion.py                     # Document loader, chunking & ChromaDB vectorizer
-│   ├── rag_engine.py                    # RAG pipeline, system prompt, few-shots & escalation
-│   ├── bot.py                           # Telegram Bot event handlers & polling runner
-│   └── main.py                          # FastAPI application & server lifecycle
-├── .env.example                         # Environment variables template
-├── .gitignore                           # Git ignore definitions
-├── example.pdf                          # Performance test requirements
-├── requirements.txt                     # Project dependencies
-└── README.md                            # Complete documentation in English
+chatbot-university/
+├── data/                                    # Official business knowledge base
+│   ├── admissions_and_pricing.md           # Tuition in COP, installment plans, discounts, payments
+│   ├── programs_and_levels.md              # Language tracks, CEFR progression (A1-C2), academic FAQ
+│   └── schedules_and_certifications.md     # Shifts, campuses, class link troubleshooting, policies
+├── frontend/                                # Client-side presentation layer (UI)
+│   └── index.html                           # Language Academy educational portal & assistant
+├── backend/                                 # Server-side architecture (Python / FastAPI)
+│   ├── requirements.txt                     # Backend dependencies
+│   └── src/
+│       ├── __init__.py
+│       ├── config.py                       # Configuration & environment loader
+│       ├── generate_documents.py           # Procedural business document generator
+│       ├── ingestion.py                    # Chunking, embeddings & vector persistence
+│       ├── intent_router.py                # Zero-latency local intent & boundary router
+│       ├── rag_engine.py                   # RAG pipeline, cross-lingual prompt & few-shots
+│       ├── catalog_service.py              # Dynamic business catalog extractor
+│       ├── cache.py                        # Exact hash & semantic similarity cache
+│       ├── metrics.py                      # Operational & financial telemetry
+│       ├── skills.py                       # Tuition calculator, test scheduler
+│       ├── mcp_server.py                   # Model Context Protocol (MCP) server
+│       └── main.py                         # FastAPI server & endpoints
+├── docs/                                   # Rigorous technical documentation
+│   ├── 01-product/PRD.md                   # Product requirements & user stories
+│   ├── 03-architecture/system-architecture.md # Technical design & data flows
+│   └── 05-ai/rag-and-prompt-engineering.md # Embedding space & prompt engineering
+├── .env.example                            # Environment variables template
+├── Dockerfile                              # Production container image
+├── docker-compose.yml                      # Container orchestration
+├── generate_documents.py                   # Root runner for document generation
+├── render.yaml                             # 1-Click cloud deployment on Render
+├── Procfile                                # PaaS runner for Railway / Heroku
+├── requirements.txt                        # Root dependencies pointer
+└── README.md                               # Complete project documentation
 ```
 
 ---
 
-## 🚀 Quick Start Guide
+## Quick Start Guide
 
 ### 1. Prerequisites
 - Python 3.10+ installed.
-- **Google Gemini API Key** (Free from [Google AI Studio](https://aistudio.google.com/)) OR OpenAI API Key.
-- Telegram Bot Token (obtained from [@BotFather](https://t.me/BotFather)).
+- **Google Gemini API Key** (Free tier from [Google AI Studio](https://aistudio.google.com/)).
 
 ### 2. Environment Setup
 
-1. Clone or open the repository folder.
-2. Create and activate a Python virtual environment:
-   ```bash
-   # Windows (PowerShell)
-   python -m venv venv
-   .\venv\Scripts\Activate.ps1
+```bash
+# 1. Create and activate virtual environment
+python3 -m venv venv
+source venv/bin/activate    # Linux / macOS
+# .\venv\Scripts\Activate.ps1 # Windows
 
-   # Linux / macOS
-   python3 -m venv venv
-   source venv/bin/activate
-   ```
-3. Install dependencies:
-   ```bash
-   pip install -r requirements.txt
-   ```
+# 2. Install dependencies
+pip install -r requirements.txt
+```
 
 ### 3. Configure Environment Variables
 
@@ -113,149 +156,139 @@ Copy `.env.example` to `.env`:
 cp .env.example .env
 ```
 
-Open `.env` and fill in your keys:
+Edit `.env` and configure your API key:
 ```ini
-# Google Gemini Configuration (Recommended - Free Tier)
-GOOGLE_API_KEY=AIzaSy...your_gemini_key_here
-GEMINI_MODEL_NAME=gemini-1.5-flash
-GEMINI_EMBEDDING_MODEL=models/text-embedding-004
+# Google Gemini Settings (Free Tier)
+GOOGLE_API_KEY=AIzaSy...your_gemini_api_key_here
+GEMINI_MODEL_NAME=gemini-3.5-flash-lite
+GEMINI_EMBEDDING_MODEL=gemini-embedding-001
 
-# Active LLM Provider
-LLM_PROVIDER=gemini
-
-# Telegram Bot (From @BotFather)
-TELEGRAM_BOT_TOKEN=123456789:ABCdefGhIJKlmNoPQRsTUVwxyZ
-
-# Server Settings
+# Application Server Settings
 APP_HOST=0.0.0.0
 APP_PORT=8000
 VECTOR_DB_DIR=./chroma_db
-SIMILARITY_THRESHOLD=0.65
-HUMAN_SUPPORT_EMAIL=admissions-support@techuniversity.edu
-HUMAN_SUPPORT_PHONE=+1 (800) 555-0199
+CACHE_ENABLED=true
+```
+
+### 4. Generate Business Documents
+
+Generate the Colombian Language Academy documents procedurally:
+```bash
+python generate_documents.py
+```
+
+### 5. Ingest Documents into Vector Database
+
+Populate ChromaDB with chunked embeddings:
+```bash
+python -m backend.src.ingestion
 ```
 
 ---
 
-## 🤖 Creating Your Telegram Bot with @BotFather
+## Running the Application
 
-1. Open Telegram and search for **[@BotFather](https://t.me/BotFather)**.
-2. Send `/newbot` and follow the on-screen instructions:
-   - Choose a friendly display name (e.g. `TechUni Admissions Bot`).
-   - Choose a unique username ending in `bot` (e.g. `techuni_admissions_bot`).
-3. Copy the **HTTP API Token** provided by BotFather.
-4. Paste it into your `.env` file under `TELEGRAM_BOT_TOKEN`.
-
----
-
-## 📚 Ingesting Business Documents
-
-Before querying, populate the ChromaDB vector database with the documents located in `data/`:
+### Start the Server (Web Form & REST API):
 
 ```bash
-python -m src.ingestion
+python -m backend.src.main
 ```
+*(Or `uvicorn backend.src.main:app --host 0.0.0.0 --port 8000 --reload`)*
 
-*Output:*
-```
-Loaded document: admissions_and_pricing.md (1840 characters)
-Loaded document: programs_and_levels.md (1960 characters)
-Loaded document: schedules_and_certifications.md (1750 characters)
-Split 3 documents into 9 chunks.
-Persisting vector database to ./chroma_db...
-Ingestion completed successfully!
+Once started, open your browser:
+- **Interactive Web Form UI**: [http://localhost:8000/](http://localhost:8000/)
+- **Swagger REST API Documentation**: [http://localhost:8000/docs](http://localhost:8000/docs)
+- **Live Metrics JSON**: [http://localhost:8000/api/metrics](http://localhost:8000/api/metrics)
+- **Health Check**: [http://localhost:8000/health](http://localhost:8000/health)
+
+### Running with Docker:
+
+```bash
+docker-compose up --build
 ```
 
 ---
 
-## 🌐 Running the Application
+## Testing & Validation Examples
 
-### Option A: Run Full Application (FastAPI + Telegram Bot in Background)
-
-```bash
-uvicorn src.main:app --reload --reload-dir src
-```
-*(Or run directly via Python: `python -m src.main`)*
-- Interactive Swagger UI: [http://localhost:8000/docs](http://localhost:8000/docs)
-- Health Check: [http://localhost:8000/health](http://localhost:8000/health)
-- The Telegram Bot will automatically start listening for messages in the background.
-
-### Option B: Run Standalone Telegram Bot
-
-If you only want to run the Telegram Bot:
-```bash
-python -m src.bot
-```
-
----
-
-## 🧪 Testing & Query Examples
-
-### 1. In-Scope Query (Tuition & Discounts)
-- **User Query**: *"What are the tuition fees and payment options for AI Engineering?"*
+### 1. In-Scope Query (Spanish - Tuition & Discounts)
+- **Query**: *¿Cuánto cuesta el curso de inglés y qué descuentos tienen con Compensar?*
 - **Response**:
-  > For the **AI Engineering Program**, we offer the following payment options:
-  > - **Upfront Payment**: $3,200 USD.
-  > - **Installment Plan**: 4 monthly payments of $850 USD (Total: $3,400 USD).
-  > - **Income Share Agreement (ISA)**: 12% of gross monthly salary once you secure a tech job earning at least $1,500 USD/month (capped at $4,500 USD).
+  > ¡Hola! Con gusto te comparto los valores oficiales de nuestros programas de inglés y los beneficios del convenio con la caja de compensación **Compensar**:
   > 
-  > Additionally, you can benefit from our **Early Bird Discount of 15%** if you register at least 30 days before the cohort start date!
+  > - **Programa Estándar (1 Nivel / 16 semanas - 96 horas)**:
+  >   - **Pago de contado**: $1,450,000 COP por nivel.
+  >   - **Plan financiado**: 4 cuotas mensuales de $395,000 COP (Total: $1,580,000 COP).
+  > - **Descuento Compensar**:
+  >   - Afiliados Categoría A: **20% de descuento**.
+  >   - Afiliados Categoría B: **15% de descuento**.
 
-### 2. In-Scope Query (Schedules & Modalities)
-- **User Query**: *"Do you have evening classes for working professionals?"*
+### 2. Operational Troubleshooting (Payment Issue via PSE)
+- **Query**: *Tengo un problema con el pago de PSE, me sale rechazado*
 - **Response**:
-  > Yes! We offer a **Part-Time Evening Cohort** (Monday to Thursday, 6:00 PM – 9:30 PM, plus Saturday 9:00 AM – 1:00 PM UTC-5) in a 100% Live Online format with daily mentor office hours.
+  > Lamento el inconveniente con tu pago por PSE. Este rechazo suele deberse a situaciones muy comunes que puedes solucionar rápidamente:
+  > 1. **Topes diarios de transferencia en tu app bancaria:** En Colombia (Bancolombia, Davivienda, etc.), el límite diario por defecto para PSE suele ser de $1,000,000 COP. Ingresa a tu app y sube temporalmente el tope.
+  > 2. **Fondos disponibles:** Verifica que tu saldo cubra el valor total.
+  > 3. **Alternativas:** Puedes elegir el **Plan en 4 Cuotas de $395,000 COP** o pagar directamente por **Nequi / Daviplata**.
 
-### 3. Out-of-Scope Query (Automatic Human Escalation)
-- **User Query**: *"Can I enroll in a culinary arts or dentistry degree?"*
+### 3. Cross-Lingual In-Scope Query (English - Schedules & Saturdays)
+- **Query**: *Tell me about the schedule and if I can take classes on Saturdays.*
 - **Response**:
-  > I'm sorry, but I don't have enough specific information in our official records to answer that accurately. To make sure you get the best guidance, I have escalated your inquiry to our human admissions team.
+  > Hello! Yes, you can absolutely take classes on Saturdays. We offer flexible schedule options:
+  > - **Saturday Intensive Shift**: Saturdays, 8:00 AM to 1:00 PM or 1:30 PM to 6:30 PM (COT / UTC-5).
+  > - **Weekday Shifts**: Morning (7:00-8:30 AM or 9:00-11:00 AM), Afternoon, and Evening (6:30-8:30 PM).
+
+### 4. Respectful Disinterest / Negative Intent (Zero Latency - No Escalation)
+- **Query**: *no quiero que me asesores, no me interesa*
+- **Response**:
+  > Entendido, no hay ningún problema. Si en algún momento necesitas información sobre los programas de idiomas, horarios o tarifas de **Language Academy**, aquí estaré a tu disposición. ¡Que tengas un excelente día!
+
+### 5. Legitimate Human Escalation (Explicit Contact Request)
+- **Query**: *Por favor pásame a un asesor humano de admisiones*
+- **Response**:
+  > ¡Con mucho gusto! Te pongo en contacto directo con nuestro equipo de admisiones de **Language Academy**:
   > 
-  > 👩‍💼 **Admissions Support Contact:**
-  > 📧 Email: `admissions-support@techuniversity.edu`
-  > 📞 Phone/WhatsApp: `+1 (800) 555-0199`
-  > ⏰ Hours: Monday - Friday, 8:00 AM - 6:00 PM (UTC-5)
-  > 
-  > An admissions specialist will be happy to assist you directly!
+  > **Canales Oficiales de Atención:**
+  > - **WhatsApp / Teléfono Móvil:** [+57 (300) 123-4567](https://wa.me/573001234567)
+  > - **Correo de Admisiones:** `admisiones@languageacademy.edu.co`
+  > - **PBX Bogotá:** +57 (601) 745-8900
+  > - **Horario de Atención:** Lunes a Viernes de 8:00 AM a 6:00 PM | Sábados de 8:00 AM a 1:00 PM (Hora Colombia)
+
+### 6. Cache Verification
+- Submitting the same question a second time returns `cached: true` with a response time of < 1 ms and $0.00 API cost.
 
 ---
 
-## 📡 REST API Documentation
+## REST API Reference
 
-### `POST /api/query`
-Send a question to the assistant.
-
-**Request:**
-```bash
-curl -X POST "http://localhost:8000/api/query" \
-     -H "Content-Type: application/json" \
-     -d '{"query": "What are the requirements for graduation and diplomas?"}'
-```
-
-**Response:**
-```json
-{
-  "query": "What are the requirements for graduation and diplomas?",
-  "answer": "To earn the official Professional Tech Specialist Diploma, you must achieve a minimum of 85% attendance across all live modules, obtain a passing grade (>= 80%) on all weekly assessments and final Capstone Project, and successfully defend your final project before the evaluation panel.",
-  "escalated": false,
-  "sources": [
-    "schedules_and_certifications.md"
-  ]
-}
-```
-
-### `POST /api/ingest`
-Trigger ingestion of new/modified documents dynamically.
+| Endpoint | Method | Description |
+| :--- | :--- | :--- |
+| `/` | `GET` | Serves the interactive Single Page Web Form application. |
+| `/api/query` | `POST` | Process admissions query with RAG, caching, and escalation. |
+| `/api/catalog` | `GET` | Dynamic business catalog extracted directly from markdown docs. |
+| `/api/metrics` | `GET` | Retrieve live operational telemetry, token counts, and costs. |
+| `/api/metrics/reset` | `POST` | Reset operational telemetry counters. |
+| `/api/cache/stats` | `GET` | Check exact and semantic response cache statistics. |
+| `/api/cache/clear` | `POST` | Flush response cache entries. |
+| `/api/skills/quote` | `POST` | Calculate custom tuition quote in COP with discounts. |
+| `/api/skills/placement` | `POST` | Book a free language diagnostic placement test. |
+| `/api/ingest` | `POST` | Trigger background document reindexing into ChromaDB. |
+| `/health` | `GET` | Service readiness and dependency health status. |
 
 ---
 
-## 🛡️ Acceptance Criteria Checklist
+## Acceptance Criteria Checklist
 
-- [x] **Backend in Python**: Modular FastAPI code orchestrating LLM, embeddings, and ChromaDB.
-- [x] **Populated Vector Store**: Ingests and chunks 3+ comprehensive business documents with overlap.
-- [x] **Input Channel**: Telegram Bot integration with interactive responses and typing feedback.
-- [x] **No n8n Required**: Python pipeline connecting triggers, semantic retrieval, and generation.
-- [x] **Prompt Engineering**: System prompt with role, brand tone, anti-hallucination rules, and 3 few-shot examples.
-- [x] **Human Escalation**: Automatic escalation when questions are out of scope.
-- [x] **Secure Configuration**: API keys loaded via environment variables; never hardcoded.
-- [x] **Language**: All code, prompts, and documentation in English.
+- [x] **Reception Channel**: Interactive Responsive Web Form + REST API (`FastAPI`).
+- [x] **AI Model Integration**: Integrated with Google Gemini (`gemini-3.5-flash-lite` / `gemini-embedding-001`) for low latency and high cost efficiency.
+- [x] **Procedural Documents**: `.py` script (`generate_documents.py`) creating the 3 rich business documents for the Colombian Language Academy in COP.
+- [x] **RAG Vector Base**: Ingests, chunks (with overlap), and embeds documents into ChromaDB.
+- [x] **Cross-Lingual Support**: Native cross-lingual semantic retrieval across English, Spanish, and French.
+- [x] **Prompt Engineering**: System prompt with brand voice, anti-hallucination rules, and few-shot examples.
+- [x] **Human Escalation**: Deterministic fallback and human advisor contact routing when out of scope.
+- [x] **Bonus 1 - Custom Skills & MCP**: Tuition calculator, placement test scheduler, and MCP server (`backend/src/mcp_server.py`).
+- [x] **Bonus 2 - Metrics**: Real-time queries, token counts, cost in USD, and escalation rate tracking (`/api/metrics`).
+- [x] **Bonus 3 - Response Cache**: Dual exact and semantic cache reducing latency to < 1 ms and eliminating redundant API costs.
+- [x] **Bonus 4 - Public Deployment**: `Dockerfile`, `docker-compose.yml`, `render.yaml`, and `Procfile`.
+- [x] **Security**: API Keys loaded strictly from `.env`, never hardcoded.
+- [x] **Deliverable Documentation**: Full documentation and `README.md` in English without emojis.
