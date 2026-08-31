@@ -135,9 +135,17 @@ chatbot-university/
 
 ### 1. Prerequisites
 - Python 3.10+ installed.
+- Git installed.
 - **Google Gemini API Key** (Free tier from [Google AI Studio](https://aistudio.google.com/)).
 
-### 2. Environment Setup
+### 2. Clone the Repository
+
+```bash
+git clone https://github.com/EdgarCorzo777/prueba-languageacademy.git
+cd prueba-languageacademy
+```
+
+### 3. Environment Setup
 
 ```bash
 # 1. Create and activate virtual environment
@@ -149,7 +157,8 @@ source venv/bin/activate    # Linux / macOS
 pip install -r requirements.txt
 ```
 
-### 3. Configure Environment Variables
+### 4. Configure Environment Variables
+
 
 Copy `.env.example` to `.env`:
 ```bash
@@ -170,14 +179,15 @@ VECTOR_DB_DIR=./chroma_db
 CACHE_ENABLED=true
 ```
 
-### 4. Generate Business Documents
+### 5. Generate Business Documents
 
 Generate the Colombian Language Academy documents procedurally:
 ```bash
 python generate_documents.py
 ```
 
-### 5. Ingest Documents into Vector Database
+### 6. Ingest Documents into Vector Database
+
 
 Populate ChromaDB with chunked embeddings:
 ```bash
