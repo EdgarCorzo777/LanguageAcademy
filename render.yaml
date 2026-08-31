@@ -2,6 +2,7 @@ services:
   - type: web
     name: language-academy-assistant
     runtime: python
+    plan: free
     buildCommand: "pip install -r requirements.txt && python generate_documents.py && python -m backend.src.ingestion"
     startCommand: "uvicorn backend.src.main:app --host 0.0.0.0 --port $PORT"
     envVars:
