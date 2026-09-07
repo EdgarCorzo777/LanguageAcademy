@@ -328,26 +328,6 @@ The container automatically generates the documents, initializes ChromaDB and SQ
 
 ---
 
-## Competency Certification Deliverables
-
-This repository fulfills the requirements for the Colombian National Competency Standards:
-
-- **Norma 220501095 - Diseñar la solución de software**:
-  - Technical design and system architecture specifications.
-  - UML Diagrams: Use Cases, Class Diagram, Sequence Diagram.
-  - Entity-Relationship Diagram (ERD) with relational foreign key constraints and junction tables.
-  - User Interface Mockups and Prototypes.
-  - Formal evidence documentation for software design standard 220501095.
-
-- **Norma 220501096 - Desarrollar la solución de software**:
-  - Complete, modular source code in Python and FastAPI.
-  - System usage manual with deployment instructions and functional screen captures.
-  - Production-ready database schema (`database/schema.sql`) and SQLite database.
-  - Version-controlled Git repository hosted on GitHub.
-  - Formal evidence documentation for software development standard 220501096.
-
----
-
 ## License
 
 This project is licensed under the MIT License.
