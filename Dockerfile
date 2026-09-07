@@ -16,10 +16,11 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 COPY requirements.txt .
 RUN pip install --upgrade pip && pip install -r requirements.txt
 
-# Copy application source code, frontend and data
+# Copy application source code, frontend, database and data
 COPY backend/ ./backend/
 COPY frontend/ ./frontend/
 COPY data/ ./data/
+COPY database/ ./database/
 COPY generate_documents.py .
 COPY .env.example .
 

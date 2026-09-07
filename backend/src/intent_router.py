@@ -24,13 +24,13 @@ class IntentRouter:
 
     # Rejection, disinterest, refusal of advice (Must be precise to avoid matching prepositions like 'para')
     DISINTEREST_PATTERNS = [
-        r"^(no\s*quiero\s*(que\s*me\s*asesores|ayuda|asesoria|nada|hablar|saber|informacion|cursos?|estudiar)?)$",
-        r"^(no\s*me\s*(interesa|asesores|ayudes|sirve|importa|gusta))$",
-        r"^(no\s*necesito\s*(ayuda|asesor|nada|informacion))$",
-        r"^(no\s*deseo\s*(nada|ayuda|asesoria|informacion))$",
+        r"^(no\s*quiero\s*(que\s*me\s*asesores|ayuda|asesoria|nada|hablar|saber|informacion|cursos?|estudiar)?(\s*gracias)?)$",
+        r"^(no\s*me\s*(interesa|asesores|ayudes|sirve|importa|gusta)(\s*(nada|mas|gracias|por\s*ahora))?)$",
+        r"^(no\s*necesito\s*(ayuda|asesor|nada|informacion)(\s*gracias)?)$",
+        r"^(no\s*deseo\s*(nada|ayuda|asesoria|informacion)(\s*gracias)?)$",
         r"^(dejame\s*en\s*paz|dejame\s*tranquilo|no\s*molestes|vete|callate|basta|detente|para\s*ya|cancelar|no\s*gracias)$",
         r"^(i\s*don'?t\s*want\s*(help|advice|anything)|not\s*interested|leave\s*me\s*alone|no\s*thanks)$",
-        r"\b(no\s*quiero\s*que\s*me\s*asesores|no\s*me\s*interesa\s*nada|no\s*quiero\s*ninguna\s*ayuda|dejame\s*en\s*paz)\b",
+        r"\b(no\s*quiero\s*que\s*me\s*asesores|no\s*me\s*interesa|no\s*quiero\s*ninguna\s*ayuda|dejame\s*en\s*paz)\b",
     ]
 
     GREETING_PATTERNS = [

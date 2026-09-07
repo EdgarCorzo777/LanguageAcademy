@@ -103,27 +103,47 @@
 <body class="min-h-full flex flex-col antialiased bg-slate-50 text-slate-800">
 
   <!-- ========================================================= -->
-  <!-- 1. HEADER INSTITUCIONAL CON NAVEGACIÓN SPA                -->
+  <!-- 1. TOP BAR INSTITUCIONAL                                  -->
+  <!-- ========================================================= -->
+  <div class="bg-navy-950 text-white text-[11px] py-1.5 px-4 border-b border-navy-900 hidden sm:block">
+    <div class="max-w-6xl mx-auto flex items-center justify-between">
+      <div class="flex items-center gap-4">
+        <span class="flex items-center gap-1.5 text-slate-300">
+          <i data-lucide="award" class="w-3.5 h-3.5 text-amber-400"></i>
+          Centro Preparador Oficial Certificaciones Internacionales (MCER A1 - C2)
+        </span>
+        <span class="text-slate-600">•</span>
+        <span class="text-slate-300">Convenios de Descuento: Compensar, Colsubsidio y Comfama</span>
+      </div>
+      <div class="flex items-center gap-3 text-slate-300">
+        <span class="flex items-center gap-1"><i data-lucide="phone" class="w-3 h-3 text-emerald-400"></i> PBX: +57 (601) 745-8900</span>
+        <span>•</span>
+        <span class="flex items-center gap-1"><i data-lucide="clock" class="w-3 h-3 text-blue-400"></i> L-V 7:00 AM - 9:00 PM</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================= -->
+  <!-- 2. NAVBAR INSTITUCIONAL CON NAVEGACIÓN                     -->
   <!-- ========================================================= -->
   <header class="bg-white border-b border-slate-200 sticky top-0 z-40 shadow-sm">
     <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
       
-      <!-- Dynamic Brand Logo -->
-      <a href="javascript:void(0)" onclick="navigateToView('view-assistant')" class="flex items-center gap-3 group">
+      <!-- Brand Logo -->
+      <a href="javascript:void(0)" onclick="navigateToView('view-home')" class="flex items-center gap-3 group">
         <div class="w-10 h-10 rounded-xl bg-primary-800 flex items-center justify-center text-white shadow-md shadow-primary-900/20 group-hover:bg-primary-700 transition-colors">
           <i data-lucide="graduation-cap" class="w-5 h-5"></i>
         </div>
         <div>
           <span id="header-inst-name" class="block text-base font-black tracking-tight text-navy-950 leading-none">LANGUAGE ACADEMY</span>
-
-          <span class="block text-xs text-slate-500 font-medium tracking-wide mt-1">Portal de Admisiones</span>
+          <span class="block text-xs text-slate-500 font-medium tracking-wide mt-1">Portal Digital de Admisiones</span>
         </div>
       </a>
 
       <!-- SPA Navigation Bar -->
       <nav class="hidden md:flex items-center gap-1.5 p-1 bg-slate-100/80 rounded-2xl border border-slate-200/80 text-xs font-bold">
-        <button onclick="navigateToView('view-assistant')" id="nav-view-assistant" class="nav-tab-btn px-4 py-2 rounded-xl transition-all bg-white text-primary-800 shadow-sm">
-          Asistente de Admisiones
+        <button onclick="navigateToView('view-home')" id="nav-view-home" class="nav-tab-btn px-4 py-2 rounded-xl transition-all bg-white text-primary-800 shadow-sm">
+          Inicio
         </button>
         <button onclick="navigateToView('view-programs')" id="nav-view-programs" class="nav-tab-btn px-4 py-2 rounded-xl transition-all text-slate-600 hover:text-slate-900">
           Programas
@@ -134,12 +154,20 @@
         <button onclick="navigateToView('view-campuses')" id="nav-view-campuses" class="nav-tab-btn px-4 py-2 rounded-xl transition-all text-slate-600 hover:text-slate-900">
           Sedes
         </button>
+        <button onclick="navigateToView('view-assistant')" id="nav-view-assistant" class="nav-tab-btn px-4 py-2 rounded-xl transition-all text-slate-600 hover:text-slate-900 flex items-center gap-1.5">
+          <i data-lucide="sparkles" class="w-3.5 h-3.5 text-primary-600"></i>
+          <span>Asistente IA</span>
+        </button>
       </nav>
 
-      <!-- Primary Action -->
-      <div class="flex items-center gap-2.5">
-        <button onclick="openModal('quote-modal')" class="hidden sm:inline-flex bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold px-3.5 py-2.5 rounded-xl border border-slate-200 transition-colors items-center gap-1.5">
-          <i data-lucide="calculator" class="w-4 h-4 text-emerald-600"></i>
+      <!-- Primary Action Buttons -->
+      <div class="flex items-center gap-2">
+        <button onclick="openModal('placement-modal')" class="hidden lg:inline-flex bg-primary-50 hover:bg-primary-100 text-primary-800 text-xs font-bold px-3 py-2.5 rounded-xl border border-primary-200 transition-colors items-center gap-1.5">
+          <i data-lucide="file-check" class="w-3.5 h-3.5 text-primary-700"></i>
+          <span>Test Nivelación Gratis</span>
+        </button>
+        <button onclick="openModal('quote-modal')" class="hidden sm:inline-flex bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold px-3 py-2.5 rounded-xl border border-slate-200 transition-colors items-center gap-1.5">
+          <i data-lucide="calculator" class="w-3.5 h-3.5 text-emerald-600"></i>
           <span>Cotizar COP</span>
         </button>
         <button onclick="openModal('advisor-modal')" class="bg-primary-800 hover:bg-primary-700 text-white text-xs sm:text-sm font-bold px-4 py-2.5 rounded-xl shadow-soft transition-all flex items-center gap-1.5">
@@ -152,10 +180,11 @@
 
     <!-- Mobile Navigation Sub-Bar -->
     <div class="md:hidden flex items-center justify-around border-t border-slate-100 px-2 py-1.5 bg-slate-50 text-[11px] font-bold">
-      <button onclick="navigateToView('view-assistant')" class="p-1.5 text-primary-800">Asistente</button>
+      <button onclick="navigateToView('view-home')" class="p-1.5 text-primary-800">Inicio</button>
       <button onclick="navigateToView('view-programs')" class="p-1.5 text-slate-600">Programas</button>
       <button onclick="navigateToView('view-schedules')" class="p-1.5 text-slate-600">Horarios</button>
       <button onclick="navigateToView('view-campuses')" class="p-1.5 text-slate-600">Sedes</button>
+      <button onclick="navigateToView('view-assistant')" class="p-1.5 text-slate-600">Asistente</button>
     </div>
 
   </header>
@@ -163,24 +192,245 @@
   <!-- ========================================================= -->
   <!-- MAIN APP CONTAINER                                        -->
   <!-- ========================================================= -->
-  <main class="flex-1 max-w-5xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 flex flex-col">
+  <main class="flex-1 max-w-6xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 flex flex-col">
     
     <!-- ======================================================= -->
-    <!-- VISTA 1: ASISTENTE DE ADMISIONES                        -->
+    <!-- VISTA 1: LANDING PAGE INSTITUCIONAL (HOME)              -->
     <!-- ======================================================= -->
-    <section id="view-assistant" class="view-panel block space-y-8">
+    <section id="view-home" class="view-panel block space-y-12">
       
-      <!-- Hero Banner -->
-      <div class="text-center max-w-2xl mx-auto pt-2">
-        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary-100/70 border border-primary-200 text-primary-800 text-xs font-bold uppercase tracking-wider mb-3">
-          <i data-lucide="sparkles" class="w-3.5 h-3.5 text-primary-700"></i>
-          <span>Asistente Digital de Admisiones</span>
+      <!-- HERO BANNER INSTITUCIONAL -->
+      <div class="relative bg-gradient-to-b from-white to-slate-100/70 border border-slate-200/90 rounded-3xl p-6 sm:p-12 shadow-float overflow-hidden">
+        <div class="max-w-3xl">
+          <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-blue-50 border border-blue-200 text-primary-800 text-xs font-bold uppercase tracking-wider mb-4">
+            <i data-lucide="shield-check" class="w-3.5 h-3.5 text-primary-700"></i>
+            <span>Admisiones Oficiales 2026 • Convenios Cajas de Compensación</span>
+          </div>
+
+          <h1 class="text-3xl sm:text-5xl font-extrabold text-navy-950 tracking-tight leading-tight">
+            Domina un nuevo idioma con estándares internacionales y certificación oficial
+          </h1>
+
+          <p class="mt-4 text-sm sm:text-base text-slate-600 leading-relaxed max-w-2xl">
+            Aprende <strong>Inglés, Francés, Alemán, Italiano o Portugués</strong> bajo el Marco Común Europeo (MCER). Clases presenciales en sedes de Bogotá y Medellín, o en modalidad 100% en vivo online con docentes expertos y financiación en pesos colombianos (COP).
+          </p>
+
+          <div class="mt-8 flex flex-wrap items-center gap-3">
+            <button onclick="navigateToView('view-assistant')" class="bg-primary-800 hover:bg-primary-700 text-white font-bold text-xs sm:text-sm px-5 py-3 rounded-xl shadow-md transition-all flex items-center gap-2">
+              <i data-lucide="sparkles" class="w-4 h-4 text-blue-200"></i>
+              <span>Consultar con Asistente Virtual</span>
+            </button>
+            <button onclick="openModal('placement-modal')" class="bg-white hover:bg-slate-50 text-slate-800 font-bold text-xs sm:text-sm px-5 py-3 rounded-xl border border-slate-300 shadow-sm transition-all flex items-center gap-2">
+              <i data-lucide="calendar-check" class="w-4 h-4 text-primary-700"></i>
+              <span>Agendar Test Diagnóstico Gratis</span>
+            </button>
+            <button onclick="openModal('quote-modal')" class="bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs sm:text-sm px-4 py-3 rounded-xl border border-slate-200 transition-all flex items-center gap-2">
+              <i data-lucide="calculator" class="w-4 h-4 text-emerald-600"></i>
+              <span>Cotizar Inversión COP</span>
+            </button>
+          </div>
+
+          <!-- Trust Badges & Highlights -->
+          <div class="mt-10 pt-8 border-t border-slate-200/80 grid grid-cols-2 sm:grid-cols-4 gap-4">
+            <div class="flex items-center gap-3">
+              <div class="w-9 h-9 rounded-xl bg-blue-50 border border-blue-100 flex items-center justify-center text-primary-700 font-bold shrink-0">
+                <i data-lucide="award" class="w-4 h-4"></i>
+              </div>
+              <div>
+                <span class="block text-xs font-bold text-navy-950">Acreditación MCER</span>
+                <span class="block text-[11px] text-slate-500">Niveles A1 a C2</span>
+              </div>
+            </div>
+
+            <div class="flex items-center gap-3">
+              <div class="w-9 h-9 rounded-xl bg-emerald-50 border border-emerald-100 flex items-center justify-center text-emerald-700 font-bold shrink-0">
+                <i data-lucide="percent" class="w-4 h-4"></i>
+              </div>
+              <div>
+                <span class="block text-xs font-bold text-navy-950">Hasta 20% Dcto.</span>
+                <span class="block text-[11px] text-slate-500">Compensar/Colsubsidio</span>
+              </div>
+            </div>
+
+            <div class="flex items-center gap-3">
+              <div class="w-9 h-9 rounded-xl bg-indigo-50 border border-indigo-100 flex items-center justify-center text-indigo-700 font-bold shrink-0">
+                <i data-lucide="credit-card" class="w-4 h-4"></i>
+              </div>
+              <div>
+                <span class="block text-xs font-bold text-navy-950">Financiación COP</span>
+                <span class="block text-[11px] text-slate-500">Cuotas sin intereses</span>
+              </div>
+            </div>
+
+            <div class="flex items-center gap-3">
+              <div class="w-9 h-9 rounded-xl bg-amber-50 border border-amber-100 flex items-center justify-center text-amber-700 font-bold shrink-0">
+                <i data-lucide="map-pin" class="w-4 h-4"></i>
+              </div>
+              <div>
+                <span class="block text-xs font-bold text-navy-950">Bogotá & Medellín</span>
+                <span class="block text-[11px] text-slate-500">+ Modalidad Online</span>
+              </div>
+            </div>
+          </div>
+
         </div>
-        <h1 class="text-3xl sm:text-4xl font-extrabold text-navy-950 tracking-tight leading-tight">
-          Encuentra el programa ideal para tu futuro
-        </h1>
-        <p class="mt-2 text-sm text-slate-600">
-          Consulta programas, precios en COP, horarios y convenios institucionales de forma guiada o libre.
+      </div>
+
+      <!-- METODOLOGÍA Y PROPUESTA DE VALOR -->
+      <div class="space-y-4">
+        <div class="text-center max-w-xl mx-auto">
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-navy-950 tracking-tight">¿Por qué estudiar en Language Academy?</h2>
+          <p class="text-xs sm:text-sm text-slate-500 mt-1.5">Un modelo educativo diseñado para que alcances fluidez real con acompañamiento continuo.</p>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-5">
+          <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-card">
+            <div class="w-10 h-10 rounded-xl bg-blue-50 text-primary-800 flex items-center justify-center mb-4">
+              <i data-lucide="message-circle" class="w-5 h-5"></i>
+            </div>
+            <h3 class="text-base font-bold text-navy-950 mb-2">Inmersión Comunicativa</h3>
+            <p class="text-xs text-slate-600 leading-relaxed">
+              Hablas desde la primera clase. Prácticas dinámicas, clubes de conversación sin costo y simulaciones de situaciones reales académicas y de negocios.
+            </p>
+          </div>
+
+          <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-card">
+            <div class="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-700 flex items-center justify-center mb-4">
+              <i data-lucide="clock" class="w-5 h-5"></i>
+            </div>
+            <h3 class="text-base font-bold text-navy-950 mb-2">Flexibilidad y Congelamiento</h3>
+            <p class="text-xs text-slate-600 leading-relaxed">
+              Jornadas entre semana (mañana, tarde, noche) o sábados intensivos. Opción de congelar tu módulo académico hasta por 6 meses por motivos laborales.
+            </p>
+          </div>
+
+          <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-card">
+            <div class="w-10 h-10 rounded-xl bg-purple-50 text-purple-700 flex items-center justify-center mb-4">
+              <i data-lucide="sparkles" class="w-5 h-5"></i>
+            </div>
+            <h3 class="text-base font-bold text-navy-950 mb-2">Admisiones Asistidas por IA</h3>
+            <p class="text-xs text-slate-600 leading-relaxed">
+              Consulta precios oficiales en COP, valida políticas de pago por PSE, agenda tu examen diagnóstico y cotiza matrículas en segundos las 24 horas del día.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- SECCIÓN PROGRAMAS DESTACADOS EN HOME -->
+      <div class="space-y-4">
+        <div class="flex items-center justify-between">
+          <div>
+            <h2 class="text-xl sm:text-2xl font-extrabold text-navy-950">Nuestros Idiomas Oficiales</h2>
+            <p class="text-xs text-slate-500">Programas de formación profesional para jóvenes y adultos (14+ años).</p>
+          </div>
+          <button onclick="navigateToView('view-programs')" class="text-xs font-bold text-primary-800 hover:underline flex items-center gap-1">
+            <span>Ver todos los programas</span>
+            <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+          </button>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-5">
+          <!-- Card Inglés -->
+          <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-card flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between mb-3">
+                <span class="text-[11px] font-bold px-2 py-0.5 rounded bg-blue-50 text-primary-800 border border-blue-100">Más Popular</span>
+                <span class="text-xs text-slate-400">A1 a C2</span>
+              </div>
+              <h3 class="text-base font-bold text-navy-950">Inglés General e Intensivo</h3>
+              <p class="text-xs text-slate-500 mt-1.5 leading-relaxed">
+                Tracks Estándar (16 semanas) e Intensivo (8 semanas). Clases en Bogotá, Medellín o 100% online en vivo.
+              </p>
+              <div class="mt-4 pt-3 border-t border-slate-100 text-xs text-slate-600 space-y-1">
+                <div class="flex items-center gap-1.5"><i data-lucide="check" class="w-3.5 h-3.5 text-emerald-600"></i><span>Contado: $1,450,000 COP / nivel</span></div>
+                <div class="flex items-center gap-1.5"><i data-lucide="check" class="w-3.5 h-3.5 text-emerald-600"></i><span>Plan cuotas: 4 cuotas de $395,000 COP</span></div>
+              </div>
+            </div>
+            <button onclick="askFromProgram('Cuéntame todos los detalles sobre el programa de Inglés General, horarios y descuentos')" class="mt-5 w-full bg-slate-50 hover:bg-primary-50 text-primary-800 font-bold text-xs py-2.5 rounded-xl border border-slate-200 transition-colors">
+              Consultar con el Asistente
+            </button>
+          </div>
+
+          <!-- Card Francés -->
+          <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-card flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between mb-3">
+                <span class="text-[11px] font-bold px-2 py-0.5 rounded bg-indigo-50 text-indigo-800 border border-indigo-100">Certificación DELF</span>
+                <span class="text-xs text-slate-400">A1 a B2</span>
+              </div>
+              <h3 class="text-base font-bold text-navy-950">Francés Lengua Extranjera (FLE)</h3>
+              <p class="text-xs text-slate-500 mt-1.5 leading-relaxed">
+                Currículo acreditado preparando estudiantes para diplomas internacionales DELF y DALF.
+              </p>
+              <div class="mt-4 pt-3 border-t border-slate-100 text-xs text-slate-600 space-y-1">
+                <div class="flex items-center gap-1.5"><i data-lucide="check" class="w-3.5 h-3.5 text-emerald-600"></i><span>Duración: 16 semanas por nivel</span></div>
+                <div class="flex items-center gap-1.5"><i data-lucide="check" class="w-3.5 h-3.5 text-emerald-600"></i><span>Descuento pronto pago 15%</span></div>
+              </div>
+            </div>
+            <button onclick="askFromProgram('¿Cómo es el programa de Francés y qué requisitos solicitan?')" class="mt-5 w-full bg-slate-50 hover:bg-primary-50 text-primary-800 font-bold text-xs py-2.5 rounded-xl border border-slate-200 transition-colors">
+              Consultar con el Asistente
+            </button>
+          </div>
+
+          <!-- Card Alemán -->
+          <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-card flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between mb-3">
+                <span class="text-[11px] font-bold px-2 py-0.5 rounded bg-amber-50 text-amber-800 border border-amber-100">Goethe-Institut</span>
+                <span class="text-xs text-slate-400">A1 a B2</span>
+              </div>
+              <h3 class="text-base font-bold text-navy-950">Alemán Académico y Profesional</h3>
+              <p class="text-xs text-slate-500 mt-1.5 leading-relaxed">
+                Preparación para estudios superiores en Alemania (Studienkolleg) y visas laborales.
+              </p>
+              <div class="mt-4 pt-3 border-t border-slate-100 text-xs text-slate-600 space-y-1">
+                <div class="flex items-center gap-1.5"><i data-lucide="check" class="w-3.5 h-3.5 text-emerald-600"></i><span>Duración: 18 semanas por nivel</span></div>
+                <div class="flex items-center gap-1.5"><i data-lucide="check" class="w-3.5 h-3.5 text-emerald-600"></i><span>Convenios con Cajas hasta 20%</span></div>
+              </div>
+            </div>
+            <button onclick="askFromProgram('Quiero información del curso de Alemán y sus tarifas oficiales')" class="mt-5 w-full bg-slate-50 hover:bg-primary-50 text-primary-800 font-bold text-xs py-2.5 rounded-xl border border-slate-200 transition-colors">
+              Consultar con el Asistente
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- BANNER ACCESO RÁPIDO AL ASISTENTE -->
+      <div class="bg-navy-950 text-white rounded-3xl p-6 sm:p-8 flex flex-col sm:flex-row items-center justify-between gap-6 shadow-float">
+        <div class="space-y-1.5 text-center sm:text-left">
+          <div class="inline-flex items-center gap-1.5 text-xs text-primary-300 font-bold uppercase tracking-wider">
+            <i data-lucide="sparkles" class="w-3.5 h-3.5"></i>
+            <span>Atención Inmediata 24 Horas</span>
+          </div>
+          <h3 class="text-xl sm:text-2xl font-extrabold text-white">¿Tienes dudas sobre precios, horarios o pagos por PSE?</h3>
+          <p class="text-xs text-slate-300 max-w-xl">
+            Nuestro asistente de admisiones resuelve inquietudes frecuentes basándose estrictamente en los documentos oficiales de la academia.
+          </p>
+        </div>
+        <button onclick="navigateToView('view-assistant')" class="shrink-0 bg-primary-600 hover:bg-primary-500 text-white font-bold text-xs sm:text-sm px-6 py-3 rounded-xl transition-all shadow-md flex items-center gap-2">
+          <span>Abrir Asistente Virtual</span>
+          <i data-lucide="arrow-right" class="w-4 h-4"></i>
+        </button>
+      </div>
+
+    </section>
+
+    <!-- ======================================================= -->
+    <!-- VISTA 2: ASISTENTE DE ADMISIONES (RAG INTERACTIVO)      -->
+    <!-- ======================================================= -->
+    <section id="view-assistant" class="view-panel hidden space-y-6">
+      
+      <!-- Assistant Header -->
+      <div class="text-center max-w-2xl mx-auto pt-2">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary-100/70 border border-primary-200 text-primary-800 text-xs font-bold uppercase tracking-wider mb-2">
+          <i data-lucide="sparkles" class="w-3.5 h-3.5 text-primary-700"></i>
+          <span>Asistente Digital de Admisiones RAG</span>
+        </div>
+        <h2 class="text-2xl sm:text-3xl font-extrabold text-navy-950 tracking-tight">
+          Pregúntale lo que necesites al Asistente Académico
+        </h2>
+        <p class="mt-1 text-xs sm:text-sm text-slate-600">
+          Respuestas fundamentadas exclusivamente en la documentación oficial de Language Academy.
         </p>
       </div>
 
@@ -195,10 +445,10 @@
             </div>
             <div>
               <div class="flex items-center gap-2">
-                <h2 id="assistant-card-title" class="font-bold text-sm text-white">Orientación de Admisiones</h2>
-                <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+                <h3 id="assistant-card-title" class="font-bold text-sm text-white">Orientación Oficial de Admisiones</h3>
+                <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
               </div>
-              <p class="text-[11px] text-slate-300">Respuestas basadas en los documentos oficiales indexados en el sistema</p>
+              <p class="text-[11px] text-slate-300">Base vectorial ChromaDB • Google Gemini 3.5 Flash Lite</p>
             </div>
           </div>
           <button onclick="resetGuidedFlow()" class="text-xs text-slate-300 hover:text-white px-2.5 py-1 rounded-lg bg-navy-900 hover:bg-navy-800 border border-slate-700/80 transition-colors flex items-center gap-1">
@@ -216,14 +466,13 @@
             </div>
             <div class="flex-1 space-y-3">
               <div class="bg-white border border-slate-200 rounded-2xl rounded-tl-none p-4 shadow-sm text-sm text-slate-700 leading-relaxed max-w-xl">
-                ¡Hola! Te doy la bienvenida. Estoy aquí para acompañarte y resolver cualquier duda sobre nuestros programas académicos, precios oficiales y horarios.
+                ¡Hola! Te doy una cordial bienvenida a <strong>Language Academy</strong>. Estoy aquí para resolver tus inquietudes sobre programas académicos, tarifas oficiales en COP, modalidades de pago y horarios.
                 <br><br>
-                <strong>¿En qué te puedo orientar hoy?</strong>
+                <strong>¿En qué tema te gustaría que te oriente hoy?</strong>
               </div>
 
               <!-- Dynamic Guided Options Chips Container -->
               <div id="initial-step-chips" class="flex flex-wrap gap-2 pt-1">
-                <!-- Dynamically injected from /api/catalog -->
                 <div class="text-xs text-slate-400 py-1">Cargando opciones dinámicas del catálogo...</div>
               </div>
             </div>
@@ -233,7 +482,7 @@
         <!-- Thinking Indicator -->
         <div id="chat-thinking" class="hidden px-6 py-2.5 bg-slate-100 border-t border-slate-200 flex items-center gap-2 text-xs text-slate-500 font-medium">
           <i data-lucide="loader-2" class="w-4 h-4 animate-spin text-primary-700"></i>
-          <span>El asistente está consultando la información oficial...</span>
+          <span>El asistente está consultando la documentación oficial...</span>
         </div>
 
         <!-- Free-form Query Input Footer -->
@@ -242,7 +491,7 @@
             <input 
               type="text" 
               id="free-query-input" 
-              placeholder="O escribe tu pregunta libre (ej. ¿Qué cursos y horarios tienen disponibles?)"
+              placeholder="Escribe tu consulta (ej. ¿Cuánto cuesta el curso de inglés y qué descuentos tienen?)"
               class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-xs sm:text-sm text-slate-800 placeholder-slate-400 focus:outline-none focus:bg-white focus:border-primary-600 focus:ring-2 focus:ring-primary-500/10 transition-all"
             >
             <button 
@@ -257,54 +506,52 @@
 
       </div>
 
-      <!-- Quick Access Hub to Other Views -->
-      <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 max-w-3xl mx-auto w-full pt-2">
+      <!-- Quick Access Shortcuts -->
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 max-w-3xl mx-auto w-full pt-1">
         <button onclick="navigateToView('view-programs')" class="bg-white hover:bg-slate-50 border border-slate-200 p-3.5 rounded-2xl text-left transition-all shadow-card flex flex-col justify-between">
           <i data-lucide="book-open" class="w-4 h-4 text-primary-700 mb-2"></i>
-          <span class="text-xs font-bold text-navy-950">Ver Programas</span>
+          <span class="text-xs font-bold text-navy-950">Ver Todos los Cursos</span>
         </button>
         <button onclick="navigateToView('view-schedules')" class="bg-white hover:bg-slate-50 border border-slate-200 p-3.5 rounded-2xl text-left transition-all shadow-card flex flex-col justify-between">
           <i data-lucide="calendar" class="w-4 h-4 text-blue-600 mb-2"></i>
-          <span class="text-xs font-bold text-navy-950">Ver Horarios</span>
+          <span class="text-xs font-bold text-navy-950">Jornadas y Turnos</span>
         </button>
         <button onclick="openModal('quote-modal')" class="bg-white hover:bg-slate-50 border border-slate-200 p-3.5 rounded-2xl text-left transition-all shadow-card flex flex-col justify-between">
           <i data-lucide="calculator" class="w-4 h-4 text-emerald-600 mb-2"></i>
-          <span class="text-xs font-bold text-navy-950">Cotizar Matrícula</span>
+          <span class="text-xs font-bold text-navy-950">Cotizador de Matrícula</span>
         </button>
-        <button onclick="navigateToView('view-campuses')" class="bg-white hover:bg-slate-50 border border-slate-200 p-3.5 rounded-2xl text-left transition-all shadow-card flex flex-col justify-between">
-          <i data-lucide="map-pin" class="w-4 h-4 text-indigo-600 mb-2"></i>
-          <span class="text-xs font-bold text-navy-950">Sedes y Modalidades</span>
+        <button onclick="openModal('placement-modal')" class="bg-white hover:bg-slate-50 border border-slate-200 p-3.5 rounded-2xl text-left transition-all shadow-card flex flex-col justify-between">
+          <i data-lucide="file-check" class="w-4 h-4 text-indigo-600 mb-2"></i>
+          <span class="text-xs font-bold text-navy-950">Examen Diagnóstico</span>
         </button>
       </div>
 
     </section>
 
     <!-- ======================================================= -->
-    <!-- VISTA 2: PROGRAMAS ACADÉMICOS (100% DINÁMICO)           -->
+    <!-- VISTA 3: PROGRAMAS ACADÉMICOS (CATÁLOGO DINÁMICO)       -->
     <!-- ======================================================= -->
     <section id="view-programs" class="view-panel hidden space-y-6">
       <div class="text-center max-w-xl mx-auto">
-        <h2 class="text-2xl sm:text-3xl font-extrabold text-navy-950 tracking-tight">Programas Académicos</h2>
-        <p class="mt-1.5 text-xs sm:text-sm text-slate-500">Programas extraídos dinámicamente de los documentos oficiales cargados en el sistema.</p>
+        <h2 class="text-2xl sm:text-3xl font-extrabold text-navy-950 tracking-tight">Catálogo de Programas Académicos</h2>
+        <p class="mt-1.5 text-xs sm:text-sm text-slate-500">Programas de idiomas extraídos de los documentos oficiales cargados en el sistema.</p>
       </div>
 
       <div id="programs-grid" class="grid grid-cols-1 md:grid-cols-3 gap-5">
-        <!-- Injected dynamically from /api/catalog -->
         <div class="col-span-3 text-center py-8 text-slate-400 text-xs">Cargando programas de la base de conocimiento...</div>
       </div>
     </section>
 
     <!-- ======================================================= -->
-    <!-- VISTA 3: HORARIOS Y JORNADAS (100% DINÁMICO)            -->
+    <!-- VISTA 4: HORARIOS Y JORNADAS                            -->
     <!-- ======================================================= -->
     <section id="view-schedules" class="view-panel hidden space-y-6">
       <div class="text-center max-w-xl mx-auto">
-        <h2 class="text-2xl sm:text-3xl font-extrabold text-navy-950 tracking-tight">Horarios y Jornadas</h2>
-        <p class="mt-1.5 text-xs sm:text-sm text-slate-500">Jornadas oficiales detectadas en los documentos de la institución.</p>
+        <h2 class="text-2xl sm:text-3xl font-extrabold text-navy-950 tracking-tight">Horarios y Jornadas Disponibles</h2>
+        <p class="mt-1.5 text-xs sm:text-sm text-slate-500">Jornadas académicas flexibles entre semana y fines de semana.</p>
       </div>
 
       <div id="schedules-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <!-- Injected dynamically from /api/catalog -->
         <div class="col-span-4 text-center py-8 text-slate-400 text-xs">Cargando horarios de la base de conocimiento...</div>
       </div>
 
@@ -316,25 +563,23 @@
     </section>
 
     <!-- ======================================================= -->
-    <!-- VISTA 4: SEDES Y MODALIDADES (100% DINÁMICO)            -->
+    <!-- VISTA 5: SEDES Y MODALIDADES                            -->
     <!-- ======================================================= -->
     <section id="view-campuses" class="view-panel hidden space-y-6">
       <div class="text-center max-w-xl mx-auto">
-        <h2 class="text-2xl sm:text-3xl font-extrabold text-navy-950 tracking-tight">Sedes y Modalidades</h2>
-        <p class="mt-1.5 text-xs sm:text-sm text-slate-500">Ubicaciones físicas y modalidades de estudio disponibles.</p>
+        <h2 class="text-2xl sm:text-3xl font-extrabold text-navy-950 tracking-tight">Sedes Físicas y Modalidad Online</h2>
+        <p class="mt-1.5 text-xs sm:text-sm text-slate-500">Instalaciones con aulas modernas y conectividad de alta velocidad.</p>
       </div>
 
       <div id="campuses-grid" class="grid grid-cols-1 md:grid-cols-2 gap-5">
-        <!-- Injected dynamically from /api/catalog -->
         <div class="col-span-2 text-center py-8 text-slate-400 text-xs">Cargando sedes y modalidades...</div>
       </div>
     </section>
 
   </main>
 
-
   <!-- ========================================================= -->
-  <!-- MODAL: COTIZADOR DE MATRÍCULA                             -->
+  <!-- MODAL 1: COTIZADOR DE MATRÍCULA                           -->
   <!-- ========================================================= -->
   <div id="quote-modal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4 modal-backdrop">
     <div class="bg-white rounded-3xl max-w-lg w-full p-6 shadow-float border border-slate-200 relative">
@@ -345,19 +590,19 @@
       <div class="mb-4">
         <h3 class="text-base font-bold text-navy-950 flex items-center gap-2">
           <i data-lucide="calculator" class="w-4 h-4 text-emerald-600"></i>
-          <span>Cotizador Oficial de Matrícula</span>
+          <span>Cotizador Oficial de Matrícula (COP)</span>
         </h3>
-        <p class="text-xs text-slate-500 mt-0.5">Calcula valores en pesos colombianos con descuentos aplicados.</p>
+        <p class="text-xs text-slate-500 mt-0.5">Calcula valores oficiales en pesos colombianos con descuentos aplicados.</p>
       </div>
 
       <form onsubmit="calculateQuote(event)" class="space-y-3 text-xs">
         <div>
-          <label class="block font-bold text-slate-600 mb-1">Programa:</label>
+          <label class="block font-bold text-slate-600 mb-1">Programa de Idiomas:</label>
           <select id="modal-quote-program" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-slate-800 font-medium outline-none">
-            <option value="standard">Programa Estándar (16 sem - 96 hrs)</option>
-            <option value="intensive">Track Intensivo de Inmersión (8 sem)</option>
-            <option value="business">Especialización / Corporativo (12 sem)</option>
-            <option value="exam_prep">Preparación de Certificaciones Oficiales</option>
+            <option value="standard">Inglés Estándar (16 sem - 96 hrs)</option>
+            <option value="intensive">Inglés Intensivo de Inmersión (8 sem)</option>
+            <option value="business">Business English Especializado (12 sem)</option>
+            <option value="exam_prep">Preparación Certificaciones Internacionales</option>
           </select>
         </div>
 
@@ -370,7 +615,7 @@
         </div>
 
         <div>
-          <label class="block font-bold text-slate-600 mb-1">Convenio o Descuento:</label>
+          <label class="block font-bold text-slate-600 mb-1">Convenio o Descuento Aplicable:</label>
           <select id="modal-quote-discount" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-slate-800 font-medium outline-none">
             <option value="none">Sin descuento</option>
             <option value="early_bird">Pronto Pago (-15%)</option>
@@ -378,12 +623,12 @@
             <option value="compensar_b">Caja Compensar - Categoría B (-15%)</option>
             <option value="colsubsidio_a">Caja Colsubsidio - Categoría A (-20%)</option>
             <option value="comfama_a">Caja Comfama - Categoría A (-20%)</option>
-            <option value="university_student">Estudiante Universitario (-10%)</option>
+            <option value="university_student">Carné Estudiante Universitario (-10%)</option>
           </select>
         </div>
 
         <button type="submit" class="w-full bg-primary-800 hover:bg-primary-700 text-white font-bold py-2.5 rounded-xl shadow-soft transition-all mt-2">
-          Calcular Inversión
+          Calcular Inversión Estimada
         </button>
       </form>
 
@@ -401,13 +646,91 @@
           <span id="m-res-total" class="text-sm font-extrabold text-primary-800">$0 COP</span>
         </div>
         <p id="m-res-installments" class="mt-1.5 text-[11px] text-slate-500 bg-white p-1.5 rounded border border-slate-200 text-center font-medium"></p>
+        <p id="m-res-code" class="mt-1 text-[10px] text-slate-400 text-center"></p>
       </div>
 
     </div>
   </div>
 
   <!-- ========================================================= -->
-  <!-- MODAL: ASESOR HUMANO                                      -->
+  <!-- MODAL 2: AGENDAMIENTO DE TEST DE NIVELACIÓN DIAGNÓSTICO   -->
+  <!-- ========================================================= -->
+  <div id="placement-modal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4 modal-backdrop">
+    <div class="bg-white rounded-3xl max-w-lg w-full p-6 shadow-float border border-slate-200 relative">
+      <button onclick="closeModal('placement-modal')" class="absolute top-5 right-5 text-slate-400 hover:text-slate-700">
+        <i data-lucide="x" class="w-5 h-5"></i>
+      </button>
+
+      <div class="mb-4">
+        <h3 class="text-base font-bold text-navy-950 flex items-center gap-2">
+          <i data-lucide="calendar-check" class="w-4 h-4 text-primary-700"></i>
+          <span>Agendar Test Diagnóstico de Nivel (Gratuito)</span>
+        </h3>
+        <p class="text-xs text-slate-500 mt-0.5">Evaluación digital de 20 min + 10 min de entrevista con un docente.</p>
+      </div>
+
+      <form onsubmit="handlePlacementSubmit(event)" class="space-y-3 text-xs">
+        <div>
+          <label class="block font-bold text-slate-600 mb-1">Nombre Completo:</label>
+          <input type="text" id="pt-name" required placeholder="Ej. Carlos Mendoza" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-slate-800 font-medium outline-none">
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="block font-bold text-slate-600 mb-1">Correo Electrónico:</label>
+            <input type="email" id="pt-email" required placeholder="carlos@ejemplo.com" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-slate-800 font-medium outline-none">
+          </div>
+          <div>
+            <label class="block font-bold text-slate-600 mb-1">Teléfono / WhatsApp:</label>
+            <input type="tel" id="pt-phone" required placeholder="3001234567" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-slate-800 font-medium outline-none">
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="block font-bold text-slate-600 mb-1">Idioma a Evaluar:</label>
+            <select id="pt-language" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-slate-800 font-medium outline-none">
+              <option value="Ingles">Inglés</option>
+              <option value="Frances">Francés</option>
+              <option value="Aleman">Alemán</option>
+              <option value="Italiano">Italiano</option>
+              <option value="Portugues">Portugués</option>
+            </select>
+          </div>
+          <div>
+            <label class="block font-bold text-slate-600 mb-1">Modalidad:</label>
+            <select id="pt-modality" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-slate-800 font-medium outline-none">
+              <option value="Online">100% Online en Vivo</option>
+              <option value="Presencial Bogota">Presencial Bogotá</option>
+              <option value="Presencial Medellin">Presencial Medellín</option>
+            </select>
+          </div>
+        </div>
+
+        <div>
+          <label class="block font-bold text-slate-600 mb-1">Fecha Preferida:</label>
+          <input type="date" id="pt-date" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-slate-800 font-medium outline-none">
+        </div>
+
+        <button type="submit" id="pt-submit-btn" class="w-full bg-primary-800 hover:bg-primary-700 text-white font-bold py-2.5 rounded-xl shadow-soft transition-all mt-2">
+          Confirmar Agendamiento
+        </button>
+      </form>
+
+      <div id="pt-success-msg" class="mt-3.5 hidden bg-emerald-50 border border-emerald-200 rounded-xl p-3.5 text-xs text-emerald-800">
+        <div class="font-bold flex items-center gap-1.5 mb-1">
+          <i data-lucide="check-circle" class="w-4 h-4 text-emerald-600"></i>
+          <span>¡Test de Nivelación Agendado Exitosamente!</span>
+        </div>
+        <p class="text-[11px] text-emerald-700" id="pt-confirm-code">Código de confirmación: TEST-2026-XXXX</p>
+        <p class="text-[10px] text-slate-500 mt-1">Un coordinador académico te contactará por WhatsApp para validar el enlace de conexión.</p>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ========================================================= -->
+  <!-- MODAL 3: ASESOR HUMANO DIRECTO                            -->
   <!-- ========================================================= -->
   <div id="advisor-modal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4 modal-backdrop">
     <div class="bg-white rounded-3xl max-w-md w-full p-6 shadow-float border border-slate-200 relative text-center">
@@ -447,29 +770,249 @@
   </div>
 
   <!-- ========================================================= -->
-  <!-- FOOTER                                                    -->
+  <!-- FOOTER INSTITUCIONAL                                      -->
   <!-- ========================================================= -->
-  <footer class="bg-white border-t border-slate-200 mt-auto py-5 px-4 sm:px-6 lg:px-8 text-center text-xs text-slate-500">
-    <div class="max-w-5xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2">
-      <div class="flex items-center gap-2">
-        <span id="footer-inst-name" class="font-bold text-navy-950">LANGUAGE ACADEMY</span>
-        <span>&bull;</span>
-        <span>Portal de Admisiones Inteligente</span>
+  <footer class="bg-white border-t border-slate-200 mt-auto py-8 px-4 sm:px-6 lg:px-8 text-xs text-slate-500">
+    <div class="max-w-6xl mx-auto grid grid-cols-1 sm:grid-cols-3 gap-6 mb-6">
+      <div>
+        <div class="flex items-center gap-2 mb-2">
+          <div class="w-6 h-6 rounded-lg bg-primary-800 text-white flex items-center justify-center font-bold text-xs">
+            <i data-lucide="graduation-cap" class="w-3.5 h-3.5"></i>
+          </div>
+          <span id="footer-inst-name" class="font-extrabold text-navy-950 text-sm">LANGUAGE ACADEMY</span>
+        </div>
+        <p class="text-xs text-slate-500 leading-relaxed">
+          Institución educativa especializada en la enseñanza de lenguas extranjeras y preparación de certificaciones oficiales bajo el Marco Común Europeo (MCER).
+        </p>
       </div>
 
-      <p id="footer-contact">Atención Oficial &bull; WhatsApp: +57 (300) 123-4567</p>
+      <div>
+        <span class="block font-bold text-navy-950 mb-2">Sedes Oficiales</span>
+        <ul class="space-y-1 text-slate-500 text-[11px]">
+          <li>• Bogotá: Sede Chapinero (Cra 13 # 54-20) y Calle 100</li>
+          <li>• Medellín: Sede El Poblado (Cra 43A) y Laureles</li>
+          <li>• Virtual: Campus Online en Vivo con soporte 24/7</li>
+        </ul>
+      </div>
+
+      <div>
+        <span class="block font-bold text-navy-950 mb-2">Canales de Atención</span>
+        <p id="footer-contact" class="text-[11px] text-slate-500">
+          WhatsApp: +57 (300) 123-4567<br>
+          PBX Bogotá: +57 (601) 745-8900<br>
+          Correo: admisiones@languageacademy.edu.co
+        </p>
+      </div>
+    </div>
+
+    <div class="max-w-6xl mx-auto pt-4 border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between gap-2 text-[11px] text-slate-400">
+      <span>© 2026 Language Academy Colombia. Todos los derechos reservados.</span>
+      <span>Sistema de Admisiones con Inteligencia Artificial y RAG Multilingüe.</span>
     </div>
   </footer>
 
   <!-- ========================================================= -->
-  <!-- JAVASCRIPT: SPA NAVIGATION & DYNAMIC CATALOG RENDERING    -->
+  <!-- JAVASCRIPT: SPA NAVIGATION & API INTERACTION              -->
   <!-- ========================================================= -->
   <script>
-    let globalCatalog = null;
+    const DEFAULT_CATALOG = {
+      "institution_name": "Language Academy",
+      "contact_email": "admisiones@languageacademy.edu.co",
+      "contact_phone": "+57 (300) 123-4567",
+      "contact_hours": "Lunes a Viernes 8:00 AM - 6:00 PM | Sábados 8:00 AM - 1:00 PM (COT / UTC-5)",
+      "programs": [
+        {
+          "title": "Inglés General e Intensivo (CEFR A1 - C1)",
+          "badge": "Más Demandado",
+          "overview": "Programa integral basado en el Marco Común Europeo. Desarrolla fluidez conversacional, comprensión auditiva, escritura profesional y lectura crítica.",
+          "highlights": [
+            "Track Estándar: 16 semanas por nivel (6 hrs/semana).",
+            "Track Intensivo: 8 semanas por nivel (12 hrs/semana).",
+            "Immersion Bootcamp: 4 semanas aceleradas."
+          ],
+          "query": "¿Cuánto cuesta el programa de Inglés General y qué horarios tienen disponibles?"
+        },
+        {
+          "title": "Business English & Comunicación Corporativa",
+          "badge": "Especialización",
+          "overview": "Currículo ejecutivo enfocado en presentaciones de alto impacto, negociación de contratos internacionales, redacción técnica y liderazgo bilingüe.",
+          "highlights": [
+            "Duración: 12 semanas (48 horas pedagógicas).",
+            "Requisito: Nivel B1 certificado.",
+            "Simulaciones de negocios reales y debates."
+          ],
+          "query": "¿Cuáles son los requisitos y costos de Business English?"
+        },
+        {
+          "title": "Francés Lengua Extranjera (DELF / DALF)",
+          "badge": "Certificación Oficial",
+          "overview": "Formación acreditada en francés general y académico con preparación específica para los diplomas oficiales de la Alianza Francesa y Ministerio Francés.",
+          "highlights": [
+            "Niveles: A1 (Découverte) hasta B2 (Avancé).",
+            "Duración: 16 semanas por nivel.",
+            "Clubes de conversación semanales sin costo."
+          ],
+          "query": "¿Qué duración y costos tiene el programa de Francés?"
+        },
+        {
+          "title": "Alemán Integral (Goethe-Institut)",
+          "badge": "Estándar Goethe",
+          "overview": "Programa estructurado alineado con los estándares del Goethe-Institut para preparación universitaria (Studienkolleg) y oportunidades laborales en Europa.",
+          "highlights": [
+            "Niveles: A1 hasta B2.",
+            "Duración: 18 semanas por nivel.",
+            "Docentes certificados con estancia nativa."
+          ],
+          "query": "Quiero conocer la intensidad y tarifas del curso de Alemán"
+        },
+        {
+          "title": "Italiano y Portugués Conversacional",
+          "badge": "Fluidez Rápida",
+          "overview": "Cursos comunicativos dinámicos orientados a una rápida fluidez verbal, gramática romance y preparación para exámenes CELI y Celpe-Bras.",
+          "highlights": [
+            "Niveles: A1 hasta B2.",
+            "Duración: 14 semanas por nivel (5 hrs/sem).",
+            "Inmersión cultural y fonética práctica."
+          ],
+          "query": "¿Qué modalidades tienen para Italiano y Portugués?"
+        }
+      ],
+      "schedules": [
+        {
+          "title": "Jornada Mañana (Morning Shift)",
+          "subtitle": "Lunes a Jueves",
+          "details": [
+            "Horario: 7:00 AM - 8:30 AM o 9:00 AM - 11:00 AM.",
+            "Ideal para universitarios y profesionales antes de iniciar la jornada laboral."
+          ],
+          "query": "¿Qué cupos hay disponibles en la Jornada Mañana?"
+        },
+        {
+          "title": "Jornada Tarde (Afternoon Shift)",
+          "subtitle": "Lunes a Jueves",
+          "details": [
+            "Horario: 2:00 PM - 4:00 PM o 4:30 PM - 6:30 PM.",
+            "Enfoque en grupos reducidos para máxima participación oral."
+          ],
+          "query": "¿Tienen disponibilidad en la Jornada Tarde?"
+        },
+        {
+          "title": "Jornada Noche (Evening Shift)",
+          "subtitle": "Lunes a Jueves",
+          "details": [
+            "Horario: 6:30 PM - 8:30 PM o 8:30 PM - 10:00 PM.",
+            "La opción preferida por profesionales y ejecutivos."
+          ],
+          "query": "¿Cuáles son las opciones de la Jornada Noche?"
+        },
+        {
+          "title": "Sábados Intensivos (Saturday Shift)",
+          "subtitle": "Fines de Semana",
+          "details": [
+            "Horario: 8:00 AM - 1:00 PM o 1:30 PM - 6:30 PM.",
+            "Sesión completa de 5 horas semanales con descansos pedagógicos."
+          ],
+          "query": "¿Puedo estudiar los sábados en jornada intensiva?"
+        }
+      ],
+      "campuses": [
+        {
+          "name": "Sede Bogotá - Chapinero Central",
+          "hours": "L-V 7:00 AM - 9:00 PM | Sáb 8:00 AM - 5:00 PM",
+          "locations": [
+            "Dirección: Carrera 13 # 54-20, Chapinero.",
+            "Aulas multimedia, laboratorio de idiomas y cafetería.",
+            "PBX: +57 (601) 745-8900"
+          ]
+        },
+        {
+          "name": "Sede Bogotá - Calle 100 (Chicó Norte)",
+          "hours": "L-V 7:00 AM - 9:00 PM | Sáb 8:00 AM - 4:00 PM",
+          "locations": [
+            "Dirección: Calle 100 # 19-61, Chicó.",
+            "Zona ejecutiva, fácil acceso TransMilenio y parqueadero.",
+            "PBX: +57 (601) 745-8901"
+          ]
+        },
+        {
+          "name": "Sede Medellín - El Poblado",
+          "hours": "L-V 7:00 AM - 8:30 PM | Sáb 8:00 AM - 4:00 PM",
+          "locations": [
+            "Dirección: Carrera 43A # 7-50A, El Poblado.",
+            "Salones con aire acondicionado y terrazas de conversación.",
+            "PBX: +57 (604) 604-3200"
+          ]
+        },
+        {
+          "name": "Campus Virtual 100% en Vivo (Nacional / Global)",
+          "hours": "Plataforma 24/7 | Clases L-S Mañana, Tarde y Noche",
+          "locations": [
+            "Clases interactivas en vivo con docentes certificados vía Zoom/Meet.",
+            "Grupos de máximo 10 estudiantes.",
+            "campus.languageacademy.edu.co"
+          ]
+        }
+      ],
+      "quick_chips": [
+        {
+          "label": "Tarifas en COP y Cuotas",
+          "query": "¿Cuánto cuesta el curso de inglés estándar y qué facilidades de pago en cuotas tienen?",
+          "icon": "circle-dollar-sign"
+        },
+        {
+          "label": "Descuentos Cajas de Compensación",
+          "query": "¿Qué descuentos tienen con Compensar, Colsubsidio y Comfama?",
+          "icon": "percent"
+        },
+        {
+          "label": "Horarios y Sábados",
+          "query": "¿Cuáles son los horarios de clase y puedo estudiar los sábados?",
+          "icon": "clock"
+        },
+        {
+          "label": "Sedes Bogotá y Medellín",
+          "query": "¿Dónde están ubicadas las sedes en Bogotá y Medellín?",
+          "icon": "map-pin"
+        },
+        {
+          "label": "Test Diagnóstico Gratuito",
+          "query": "¿Cómo funciona el test de nivelación gratuito y cómo puedo agendarlo?",
+          "icon": "file-check"
+        },
+        {
+          "label": "Problemas de Pago con PSE",
+          "query": "Tengo un problema con el pago de PSE, me sale rechazado, ¿qué hago?",
+          "icon": "alert-circle"
+        }
+      ]
+    };
+
+    let globalCatalog = DEFAULT_CATALOG;
 
     document.addEventListener('DOMContentLoaded', () => {
+      // 1. Inmediatamente renderizar con catálogo predeterminado completo
+      applyCatalog(DEFAULT_CATALOG);
+      lucide.createIcons();
+
+      // 2. Intentar actualización asíncrona si el backend está activo
       loadCatalogAndDocs();
     });
+
+    function applyCatalog(data) {
+      if (!data) return;
+      globalCatalog = data;
+      if (data.institution_name) {
+        const hName = document.getElementById('header-inst-name');
+        const fName = document.getElementById('footer-inst-name');
+        if (hName) hName.innerText = data.institution_name.toUpperCase();
+        if (fName) fName.innerText = data.institution_name.toUpperCase();
+      }
+      renderQuickChips(data.quick_chips);
+      renderProgramsGrid(data.programs);
+      renderSchedulesGrid(data.schedules);
+      renderCampusesGrid(data.campuses);
+      lucide.createIcons();
+    }
 
     // SPA Navigation Function
     function navigateToView(viewId) {
@@ -508,16 +1051,15 @@
       try {
         const res = await fetch('/api/catalog');
         const data = await res.json();
-        globalCatalog = data;
-
-        // 1. Update Institution Name & Contacts
+        applyCatalog(data);
+        return;
         if (data.institution_name) {
           document.getElementById('header-inst-name').innerText = data.institution_name.toUpperCase();
           document.getElementById('footer-inst-name').innerText = data.institution_name.toUpperCase();
         }
         if (data.contact_phone) {
           document.getElementById('advisor-phone').innerText = data.contact_phone;
-          document.getElementById('footer-contact').innerText = `Atención Oficial • WhatsApp / Tel: ${data.contact_phone}`;
+          document.getElementById('footer-contact').innerHTML = `WhatsApp: ${data.contact_phone}<br>PBX: +57 (601) 745-8900<br>Correo: admisiones@languageacademy.edu.co`;
         }
         if (data.contact_email) {
           document.getElementById('advisor-email').innerText = data.contact_email;
@@ -527,21 +1069,13 @@
           document.getElementById('advisor-hours').innerText = `Atención: ${data.contact_hours}`;
         }
 
-        // 2. Render Dynamic Initial Query Chips in Assistant
         renderQuickChips(data.quick_chips);
-
-        // 3. Render Dynamic Programs Grid
         renderProgramsGrid(data.programs);
-
-        // 4. Render Dynamic Schedules Grid
         renderSchedulesGrid(data.schedules);
-
-        // 5. Render Dynamic Campuses Grid
         renderCampusesGrid(data.campuses);
 
         lucide.createIcons();
       } catch (err) {
-
         console.error('Error loading dynamic catalog:', err);
       }
     }
@@ -552,7 +1086,7 @@
       if (!chips || chips.length === 0) return;
 
       container.innerHTML = chips.map(chip => `
-        <button onclick="executeGuidedQuery('${chip.query.replace(/'/g, "\\'")}')" class="bg-white hover:bg-primary-50 hover:border-primary-300 text-primary-900 border border-slate-200 px-3 py-1.5 rounded-xl text-xs font-semibold shadow-sm transition-all flex items-center gap-1.5">
+        <button onclick="executeGuidedQuery('${chip.query.replace(/'/g, "\'")}')" class="bg-white hover:bg-primary-50 hover:border-primary-300 text-primary-900 border border-slate-200 px-3 py-1.5 rounded-xl text-xs font-semibold shadow-sm transition-all flex items-center gap-1.5">
           <i data-lucide="${chip.icon || 'message-square'}" class="w-3.5 h-3.5 text-primary-600"></i>
           <span>${chip.label}</span>
         </button>
@@ -584,7 +1118,7 @@
               </div>
             ` : ''}
           </div>
-          <button onclick="askFromProgram('${p.query.replace(/'/g, "\\'")}')" class="mt-5 w-full bg-slate-50 hover:bg-primary-50 text-primary-800 font-bold text-xs py-2.5 rounded-xl border border-slate-200 transition-colors">
+          <button onclick="askFromProgram('${p.query.replace(/'/g, "\'")}')" class="mt-5 w-full bg-slate-50 hover:bg-primary-50 text-primary-800 font-bold text-xs py-2.5 rounded-xl border border-slate-200 transition-colors">
             Preguntar al Asistente
           </button>
         </div>
@@ -601,15 +1135,17 @@
       }
 
       grid.innerHTML = schedules.map(s => `
-        <div class="p-4 rounded-2xl bg-white border border-slate-200 shadow-card">
-          <div class="w-8 h-8 rounded-lg bg-blue-100 text-primary-800 flex items-center justify-center mb-2.5">
-            <i data-lucide="clock" class="w-4 h-4"></i>
+        <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-card flex flex-col justify-between">
+          <div>
+            <span class="text-[11px] font-bold px-2 py-0.5 rounded bg-indigo-50 text-indigo-700 border border-indigo-100 mb-3 inline-block">${s.subtitle || 'Jornada'}</span>
+            <h3 class="text-sm font-bold text-navy-950 mb-2">${s.title}</h3>
+            <div class="space-y-1 text-xs text-slate-500">
+              ${s.details.map(d => `<p>• ${d}</p>`).join('')}
+            </div>
           </div>
-          <h3 class="font-bold text-sm text-navy-950">${s.title}</h3>
-          <p class="text-xs text-slate-500 mt-0.5">${s.subtitle || 'Jornada'}</p>
-          <div class="mt-2 text-xs font-semibold text-primary-800 space-y-1">
-            ${s.details.map(d => `<p>${d}</p>`).join('')}
-          </div>
+          <button onclick="askFromProgram('${s.query.replace(/'/g, "\'")}')" class="mt-4 w-full bg-slate-50 hover:bg-indigo-50 text-indigo-700 font-bold text-xs py-2 rounded-xl border border-slate-200 transition-colors">
+            Consultar Cupos
+          </button>
         </div>
       `).join('');
       lucide.createIcons();
@@ -619,49 +1155,154 @@
     function renderCampusesGrid(campuses) {
       const grid = document.getElementById('campuses-grid');
       if (!campuses || campuses.length === 0) {
-        grid.innerHTML = '<div class="col-span-2 text-center py-8 text-slate-400 text-xs">No se encontraron secciones de sedes en los documentos cargados.</div>';
+        grid.innerHTML = '<div class="col-span-2 text-center py-8 text-slate-400 text-xs">No se encontraron sedes en los documentos cargados.</div>';
         return;
       }
 
       grid.innerHTML = campuses.map(c => `
-        <div class="bg-white border border-slate-200 rounded-2xl p-5 shadow-card">
+        <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-card">
           <div class="flex items-center gap-3 mb-3">
-            <div class="w-9 h-9 rounded-xl bg-blue-100 text-primary-800 flex items-center justify-center font-bold">
+            <div class="w-9 h-9 rounded-xl bg-blue-50 text-primary-800 flex items-center justify-center">
               <i data-lucide="map-pin" class="w-4 h-4"></i>
             </div>
             <div>
-              <h3 class="font-bold text-sm text-navy-950">${c.name}</h3>
-              <p class="text-xs text-slate-500">Sede Oficial</p>
+              <h3 class="text-base font-bold text-navy-950">${c.name}</h3>
+              <p class="text-xs text-slate-500">${c.hours || 'Atención en horarios de oficina'}</p>
             </div>
           </div>
-          <div class="space-y-2 text-xs text-slate-600 border-t border-slate-100 pt-3">
-            ${c.locations.map(l => `<p>📍 ${l}</p>`).join('')}
-            <p>⏰ <strong>Atención:</strong> ${c.hours || 'Lunes a Viernes 8:00 AM - 6:00 PM'}</p>
+          <div class="mt-4 pt-3 border-t border-slate-100 space-y-1.5 text-xs text-slate-600">
+            ${c.locations.map(loc => `<p class="flex items-center gap-2"><i data-lucide="navigation" class="w-3.5 h-3.5 text-slate-400"></i> ${loc}</p>`).join('')}
           </div>
         </div>
       `).join('');
       lucide.createIcons();
     }
 
-    // Reset Chat to Initial State
+    // Switch to Assistant View and Ask Question
+    function askFromProgram(query) {
+      navigateToView('view-assistant');
+      executeGuidedQuery(query);
+    }
 
+    // Handle Guided Query Chips
+    function executeGuidedQuery(query) {
+      const input = document.getElementById('free-query-input');
+      input.value = query;
+      submitQuery(query);
+    }
+
+    // Handle Free-Form Text Submit
+    function handleFreeTextQuery(e) {
+      e.preventDefault();
+      const input = document.getElementById('free-query-input');
+      const q = input.value.trim();
+      if (!q) return;
+      submitQuery(q);
+      input.value = '';
+    }
+
+    // Submit Query to /api/query
+    async function submitQuery(queryText) {
+      const chatContainer = document.getElementById('chat-messages');
+      const thinkingIndicator = document.getElementById('chat-thinking');
+
+      // 1. Append User Message Bubble
+      const userBubble = `
+        <div class="flex items-start justify-end gap-3">
+          <div class="bg-primary-800 text-white rounded-2xl rounded-tr-none px-4 py-3 shadow-sm text-sm max-w-xl leading-relaxed">
+            ${queryText}
+          </div>
+          <div class="w-8 h-8 rounded-full bg-primary-900 text-white flex items-center justify-center shrink-0 mt-0.5 font-bold text-xs">
+            <i data-lucide="user" class="w-4 h-4"></i>
+          </div>
+        </div>
+      `;
+      chatContainer.insertAdjacentHTML('beforeend', userBubble);
+      chatContainer.scrollTop = chatContainer.scrollHeight;
+      thinkingIndicator.classList.remove('hidden');
+      lucide.createIcons();
+
+      try {
+        const response = await fetch('/api/query', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ query: queryText })
+        });
+        const data = await response.json();
+        thinkingIndicator.classList.add('hidden');
+
+        // Parse markdown content
+        const parsedContent = marked.parse(data.answer || 'No se recibió respuesta.');
+
+        // Escalation indicator
+        const escalationBadge = data.escalated ? `
+          <div class="mt-3 p-3 bg-amber-50 border border-amber-200 rounded-xl text-xs text-amber-800 flex items-center gap-2">
+            <i data-lucide="alert-circle" class="w-4 h-4 text-amber-600 shrink-0"></i>
+            <span>Consulta transferida a nuestro equipo de admisiones. Puedes escribir directamente a WhatsApp o correo institucional.</span>
+          </div>
+        ` : '';
+
+        // Sources and latency metadata
+        const metaBadges = `
+          <div class="mt-2.5 pt-2 border-t border-slate-100 flex flex-wrap items-center gap-2 text-[10px] text-slate-400">
+            <span class="flex items-center gap-1"><i data-lucide="clock" class="w-3 h-3"></i> ${data.latency_ms || 0} ms</span>
+            <span>•</span>
+            <span class="flex items-center gap-1"><i data-lucide="database" class="w-3 h-3"></i> ${data.cached ? 'Caché inmediata' : 'Verificado en Base Vectorial'}</span>
+            ${data.sources && data.sources.length > 0 ? `<span>• Fuentes: ${data.sources.join(', ')}</span>` : ''}
+          </div>
+        `;
+
+        const botBubble = `
+          <div class="flex items-start gap-3">
+            <div class="w-8 h-8 rounded-full bg-primary-100 text-primary-800 flex items-center justify-center shrink-0 mt-0.5 font-bold text-xs">
+              <i data-lucide="sparkles" class="w-4 h-4"></i>
+            </div>
+            <div class="flex-1">
+              <div class="bg-white border border-slate-200 rounded-2xl rounded-tl-none p-4 shadow-sm text-sm text-slate-700 leading-relaxed max-w-xl">
+                <div class="chat-markdown">${parsedContent}</div>
+                ${escalationBadge}
+                ${metaBadges}
+              </div>
+            </div>
+          </div>
+        `;
+        chatContainer.insertAdjacentHTML('beforeend', botBubble);
+        chatContainer.scrollTop = chatContainer.scrollHeight;
+        lucide.createIcons();
+
+      } catch (err) {
+        thinkingIndicator.classList.add('hidden');
+        const errorBubble = `
+          <div class="flex items-start gap-3">
+            <div class="w-8 h-8 rounded-full bg-rose-100 text-rose-700 flex items-center justify-center shrink-0 mt-0.5">
+              <i data-lucide="alert-triangle" class="w-4 h-4"></i>
+            </div>
+            <div class="bg-rose-50 border border-rose-200 rounded-2xl p-4 text-xs text-rose-800 max-w-xl">
+              Lo sentimos, ocurrió un error de conexión con el servidor. Por favor intenta de nuevo o comunícate a nuestro WhatsApp de admisiones.
+            </div>
+          </div>
+        `;
+        chatContainer.insertAdjacentHTML('beforeend', errorBubble);
+        chatContainer.scrollTop = chatContainer.scrollHeight;
+        lucide.createIcons();
+      }
+    }
+
+    // Reset Chat Flow
     function resetGuidedFlow() {
-      const container = document.getElementById('chat-messages');
-      container.innerHTML = `
+      const chatContainer = document.getElementById('chat-messages');
+      chatContainer.innerHTML = `
         <div class="flex items-start gap-3">
           <div class="w-8 h-8 rounded-full bg-primary-100 text-primary-800 flex items-center justify-center shrink-0 mt-0.5 font-bold text-xs">
             <i data-lucide="sparkles" class="w-4 h-4"></i>
           </div>
           <div class="flex-1 space-y-3">
             <div class="bg-white border border-slate-200 rounded-2xl rounded-tl-none p-4 shadow-sm text-sm text-slate-700 leading-relaxed max-w-xl">
-              ¡Hola! Te doy la bienvenida. Estoy aquí para acompañarte y resolver cualquier duda sobre nuestros programas académicos, precios oficiales y horarios.
+              ¡Hola! Te doy una cordial bienvenida a <strong>Language Academy</strong>. Estoy aquí para resolver tus inquietudes sobre programas académicos, tarifas oficiales en COP, modalidades de pago y horarios.
               <br><br>
-              <strong>¿En qué te puedo orientar hoy?</strong>
+              <strong>¿En qué tema te gustaría que te oriente hoy?</strong>
             </div>
-
-            <div id="initial-step-chips" class="flex flex-wrap gap-2 pt-1">
-              <!-- Chips injected dynamically -->
-            </div>
+            <div id="initial-step-chips" class="flex flex-wrap gap-2 pt-1"></div>
           </div>
         </div>
       `;
@@ -671,123 +1312,66 @@
       lucide.createIcons();
     }
 
-    function appendUserMessage(text) {
-      const container = document.getElementById('chat-messages');
-      const div = document.createElement('div');
-      div.className = 'flex justify-end';
-      div.innerHTML = `
-        <div class="bg-primary-800 text-white rounded-2xl rounded-tr-none px-4 py-2.5 max-w-lg text-xs sm:text-sm font-medium shadow-sm">
-          ${text}
-        </div>
-      `;
-      container.appendChild(div);
-      container.scrollTop = container.scrollHeight;
-    }
-
-    function appendAssistantAnswer(htmlContent, sources = [], escalated = false) {
-      const container = document.getElementById('chat-messages');
-      const div = document.createElement('div');
-      div.className = 'flex items-start gap-3';
-
-      let footerHtml = '';
-      if (escalated) {
-        footerHtml = `
-          <div class="mt-3 p-2.5 rounded-xl bg-amber-50 border border-amber-200 flex items-center justify-between text-xs text-amber-900">
-            <span class="font-semibold">¿Deseas hablar directamente con un asesor humano?</span>
-            <button onclick="openModal('advisor-modal')" class="bg-amber-800 hover:bg-amber-700 text-white font-bold px-2.5 py-1 rounded-lg text-xs">
-              Contactar
-            </button>
-          </div>
-        `;
-      } else {
-        footerHtml = `
-          <div class="mt-3 pt-2.5 border-t border-slate-100 flex flex-wrap items-center gap-1.5">
-            <button onclick="openModal('quote-modal')" class="text-xs bg-slate-100 hover:bg-slate-200 text-slate-700 px-2.5 py-1 rounded-lg font-semibold transition-colors">
-              💰 Cotizar Matrícula
-            </button>
-            <button onclick="openModal('advisor-modal')" class="text-xs bg-slate-100 hover:bg-slate-200 text-slate-700 px-2.5 py-1 rounded-lg font-semibold transition-colors">
-              👩‍💼 Hablar con Asesor
-            </button>
-          </div>
-        `;
-      }
-
-      div.innerHTML = `
-        <div class="w-8 h-8 rounded-full bg-primary-100 text-primary-800 flex items-center justify-center shrink-0 mt-0.5 font-bold text-xs">
-          <i data-lucide="sparkles" class="w-4 h-4"></i>
-        </div>
-        <div class="flex-1 bg-white border border-slate-200 rounded-2xl rounded-tl-none p-4 shadow-sm text-xs sm:text-sm text-slate-700 max-w-xl">
-          <div class="chat-markdown">${htmlContent}</div>
-          ${footerHtml}
-        </div>
-      `;
-      container.appendChild(div);
-      lucide.createIcons();
-      container.scrollTop = container.scrollHeight;
-    }
-
-    async function executeGuidedQuery(queryText) {
-      appendUserMessage(queryText);
-      const thinking = document.getElementById('chat-thinking');
-      thinking.classList.remove('hidden');
-
-      try {
-        const response = await fetch('/api/query', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ query: queryText })
-        });
-        if (!response.ok) {
-          const errData = await response.json().catch(() => ({}));
-          throw new Error(errData.detail || `Error HTTP ${response.status}`);
-        }
-        const data = await response.json();
-        appendAssistantAnswer(marked.parse(data.answer || ''), data.sources || [], data.escalated || false);
-      } catch (err) {
-        console.error('Query execution error:', err);
-        appendAssistantAnswer('Disculpa, ocurrió un error de conexión con el servidor. Por favor verifica que el backend esté en ejecución e intenta nuevamente.');
-      } finally {
-        thinking.classList.add('hidden');
-      }
-
-    }
-
-    function askFromProgram(text) {
-      navigateToView('view-assistant');
-      executeGuidedQuery(text);
-    }
-
-    function handleFreeTextQuery(e) {
-      e.preventDefault();
-      const input = document.getElementById('free-query-input');
-      const val = input.value.trim();
-      if (!val) return;
-      input.value = '';
-      executeGuidedQuery(val);
-    }
-
+    // Modal: Calculate Tuition Quote
     async function calculateQuote(e) {
       e.preventDefault();
-      const program_type = document.getElementById('modal-quote-program').value;
-      const payment_plan = document.getElementById('modal-quote-plan').value;
-      const discount_code = document.getElementById('modal-quote-discount').value;
+      const prog = document.getElementById('modal-quote-program').value;
+      const plan = document.getElementById('modal-quote-plan').value;
+      const disc = document.getElementById('modal-quote-discount').value;
 
       try {
         const res = await fetch('/api/skills/quote', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ program_type, payment_plan, discount_code })
+          body: JSON.stringify({ program_type: prog, payment_plan: plan, discount_code: disc })
         });
-        const data = await res.json();
-
-        document.getElementById('m-res-base').innerText = '$' + data.base_price_cop.toLocaleString('es-CO') + ' COP';
-        document.getElementById('m-res-disc').innerText = '-$' + data.discount_amount_cop.toLocaleString('es-CO') + ' COP (' + data.discount_applied + ')';
-        document.getElementById('m-res-total').innerText = '$' + data.final_price_cop.toLocaleString('es-CO') + ' COP';
-        document.getElementById('m-res-installments').innerText = 'Plan de pago: ' + data.installments_info;
-
+        const d = await res.json();
+        
+        document.getElementById('m-res-base').innerText = `$${d.base_price_cop.toLocaleString('es-CO')} COP`;
+        document.getElementById('m-res-disc').innerText = `-$${d.discount_amount_cop.toLocaleString('es-CO')} COP (${d.discount_percentage}%)`;
+        document.getElementById('m-res-total').innerText = `$${d.final_price_cop.toLocaleString('es-CO')} COP`;
+        document.getElementById('m-res-installments').innerText = d.installments_info;
+        if (d.quote_number) {
+          document.getElementById('m-res-code').innerText = `Cotización registrada: ${d.quote_number}`;
+        }
         document.getElementById('modal-quote-result').classList.remove('hidden');
       } catch (err) {
-        alert('Error al calcular: ' + err.message);
+        console.error('Error calculando cotización:', err);
+      }
+    }
+
+    // Modal: Submit Diagnostic Placement Test
+    async function handlePlacementSubmit(e) {
+      e.preventDefault();
+      const btn = document.getElementById('pt-submit-btn');
+      btn.disabled = true;
+      btn.innerText = 'Procesando agendamiento...';
+
+      const payload = {
+        student_name: document.getElementById('pt-name').value.trim(),
+        email: document.getElementById('pt-email').value.trim(),
+        phone: document.getElementById('pt-phone').value.trim(),
+        language: document.getElementById('pt-language').value,
+        modality: document.getElementById('pt-modality').value,
+        preferred_date: document.getElementById('pt-date').value || null
+      };
+
+      try {
+        const res = await fetch('/api/skills/placement', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        const data = await res.json();
+        
+        document.getElementById('pt-confirm-code').innerText = `Código oficial de cita: ${data.confirmation_id || 'CONFIRMADO'}`;
+        document.getElementById('pt-success-msg').classList.remove('hidden');
+        btn.innerText = '¡Agendado!';
+        lucide.createIcons();
+      } catch (err) {
+        btn.disabled = false;
+        btn.innerText = 'Confirmar Agendamiento';
+        alert('Ocurrió un error al agendar la cita. Por favor intenta nuevamente.');
       }
     }
   </script>

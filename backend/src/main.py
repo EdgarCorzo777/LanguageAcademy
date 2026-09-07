@@ -2,7 +2,7 @@ import sys
 import logging
 from pathlib import Path
 from typing import List, Optional, Dict, Any
-from fastapi import FastAPI, HTTPException, BackgroundTasks
+from fastapi import FastAPI, HTTPException
 from fastapi.responses import FileResponse, HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field
@@ -19,10 +19,10 @@ try:
         ACADEMY_NAME,
     )
     from backend.src.rag_engine import rag_engine
-    from backend.src.ingestion import ingest_data
     from backend.src.metrics import metrics_collector
     from backend.src.cache import response_cache
     from backend.src.skills import calculate_tuition_quote, schedule_placement_test
+    from backend.src.catalog_service import extract_catalog_from_documents
 except ImportError:
     from src.config import (
         APP_HOST,
@@ -35,10 +35,10 @@ except ImportError:
         ACADEMY_NAME,
     )
     from src.rag_engine import rag_engine
-    from src.ingestion import ingest_data
     from src.metrics import metrics_collector
     from src.cache import response_cache
     from src.skills import calculate_tuition_quote, schedule_placement_test
+    from src.catalog_service import extract_catalog_from_documents
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 logger = logging.getLogger(__name__)
@@ -87,6 +87,7 @@ class PlacementTestRequest(BaseModel):
     modality: str = "online"
     preferred_date: Optional[str] = None
     email: Optional[str] = None
+    phone: Optional[str] = None
 
 
 class HealthResponse(BaseModel):
@@ -96,11 +97,6 @@ class HealthResponse(BaseModel):
     vector_db_ready: bool
     ai_configured: bool
     cache_enabled: bool
-
-
-class IngestResponse(BaseModel):
-    status: str
-    message: str
 
 
 @app.get("/", response_class=HTMLResponse, tags=["Web Form"])
@@ -193,16 +189,13 @@ async def register_placement_test(request: PlacementTestRequest):
         modality=request.modality,
         preferred_date=request.preferred_date,
         email=request.email,
+        phone=request.phone,
     )
 
 
 @app.get("/api/catalog", tags=["Catalog & Knowledge Base"])
 async def get_dynamic_catalog():
     """Extract and return dynamic catalog of programs, schedules, and campuses from active documents."""
-    try:
-        from backend.src.catalog_service import extract_catalog_from_documents
-    except ImportError:
-        from src.catalog_service import extract_catalog_from_documents
     return extract_catalog_from_documents()
 
 

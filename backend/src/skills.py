@@ -66,7 +66,7 @@ def calculate_tuition_quote(
     discount_amount = int(base_price * discount["pct"])
     final_price = base_price - discount_amount
 
-    return {
+    quote_res = {
         "program_name": program["name"],
         "payment_plan": payment_plan,
         "base_price_cop": base_price,
@@ -82,6 +82,15 @@ def calculate_tuition_quote(
         "currency": "COP",
     }
 
+    try:
+        from backend.src.database import record_quote
+        cot_id = record_quote(prog_key, payment_plan, disc_key, quote_res)
+        quote_res["quote_number"] = cot_id
+    except Exception:
+        pass
+
+    return quote_res
+
 
 def schedule_placement_test(
     student_name: str,
@@ -89,10 +98,11 @@ def schedule_placement_test(
     modality: str = "online",
     preferred_date: Optional[str] = None,
     email: Optional[str] = None,
+    phone: Optional[str] = None,
 ) -> Dict[str, Any]:
     """Register and schedule a diagnostic language level placement test."""
     test_id = f"TEST-{datetime.now().strftime('%Y%m')}-{uuid.uuid4().hex[:6].upper()}"
-    return {
+    res = {
         "confirmation_id": test_id,
         "status": "scheduled",
         "student_name": student_name,
@@ -102,6 +112,22 @@ def schedule_placement_test(
         "email": email or "Pending email confirmation",
         "instructions": "The placement test consists of 20 min grammar/listening + 10 min live speaking diagnostic.",
     }
+
+    try:
+        from backend.src.database import record_placement_booking
+        db_res = record_placement_booking(
+            student_name=student_name,
+            email=email or f"lead_{uuid.uuid4().hex[:4]}@languageacademy.edu.co",
+            language=language,
+            modality=modality,
+            preferred_date=preferred_date,
+            phone=phone
+        )
+        res["confirmation_id"] = db_res.get("confirmation_id", test_id)
+    except Exception:
+        pass
+
+    return res
 
 
 def create_escalation_ticket(

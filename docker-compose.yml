@@ -16,4 +16,4 @@ services:
       - CACHE_ENABLED=true
     volumes:
       - ./chroma_db:/app/chroma_db
-      - ./metrics.json:/app/metrics.json
+      - ./database:/app/database

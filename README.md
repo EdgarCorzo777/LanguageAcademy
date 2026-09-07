@@ -1,195 +1,224 @@
-# Language Academy AI Admissions Assistant (Multilingual RAG with Python, Gemini & Web Form)
+# Language Academy Admissions Assistant
 
-An enterprise-grade customer support assistant designed for a **Colombian Language Academy** (*Academia de Idiomas*). The system is built with **Retrieval-Augmented Generation (RAG)** in Python, combining **FastAPI**, **ChromaDB**, **Google Gemini**, and a responsive **Web Form UI**.
+<p align="left">
+  <img src="https://img.shields.io/badge/Python-3.10%20%7C%203.11%20%7C%203.12%20%7C%203.13-3776AB?style=flat&logo=python&logoColor=white" alt="Python 3.10+">
+  <img src="https://img.shields.io/badge/FastAPI-0.110%2B-009688?style=flat&logo=fastapi&logoColor=white" alt="FastAPI 0.110+">
+  <img src="https://img.shields.io/badge/Google%20Gemini-3.5%20Flash%20Lite-8E75F4?style=flat&logo=google&logoColor=white" alt="Google Gemini 3.5 Flash Lite">
+  <img src="https://img.shields.io/badge/LangChain-0.1%2B-1C3C3C?style=flat&logo=langchain&logoColor=white" alt="LangChain 0.1+">
+  <img src="https://img.shields.io/badge/ChromaDB-Vector%20Store-FF6F00?style=flat&logo=databricks&logoColor=white" alt="ChromaDB">
+  <img src="https://img.shields.io/badge/Storage-SQLite%20WAL-003B57?style=flat&logo=sqlite&logoColor=white" alt="SQLite WAL">
+  <img src="https://img.shields.io/badge/TailwindCSS-3.4-06B6D4?style=flat&logo=tailwindcss&logoColor=white" alt="TailwindCSS 3.4">
+  <img src="https://img.shields.io/badge/Docker-Containerized-2496ED?style=flat&logo=docker&logoColor=white" alt="Docker">
+  <img src="https://img.shields.io/badge/License-MIT-green?style=flat" alt="License MIT">
+</p>
 
-The assistant automatically handles inquiries regarding **language programs, levels (CEFR), schedules, tuition in Colombian Pesos (COP), payment plans, international certifications, and campus modalities**, while strictly adhering to business documents, supporting cross-lingual semantic queries, and escalating out-of-scope requests to human advisors.
+An enterprise-grade customer support and admissions assistant engineered for a Colombian Language Academy (*Academia de Idiomas*). The system is built with Retrieval-Augmented Generation (RAG) in Python, combining FastAPI, ChromaDB, Google Gemini (Gemini 3.5 Flash Lite & Gemini Embeddings), SQLite relational persistence, Model Context Protocol (MCP) tooling, and an interactive Single Page Web Application (SPA).
 
----
-
-## Key Highlights & Features
-
-1. **Interactive Web Form Interface (`frontend/index.html`)**:
-   - Modern, responsive Single Page Application (SPA) served directly at `http://localhost:8000/`.
-   - Clean view navigation across Assistant, Programs, Schedules, and Campuses.
-   - Dedicated contextual modals for **Tuition Quotation Calculator (COP)** and **Direct Human Advisor Contact**.
-
-2. **Procedural Document Generation & Knowledge Base (`generate_documents.py`)**:
-   - Generates 3 comprehensive, realistic business documents in `data/`:
-     - `programs_and_levels.md`: English, French, German, Italian, Portuguese tracks, CEFR levels (A1 to C2), placement test details, age requirements, and included materials.
-     - `admissions_and_pricing.md`: Official tuition rates in COP, installment options, corporate discounts (Compensar, Colsubsidio, Comfama), and payment troubleshooting (PSE daily transfer limits, banking vouchers, corporate electronic invoicing).
-     - `schedules_and_certifications.md`: Shifts, physical campuses in Bogotá and Medellín, live online class access troubleshooting (missing Zoom/Meet links, spam folder, student portal, WhatsApp groups), freezing policies, and refunds.
-
-3. **Zero-Latency Intent Router (`backend/src/intent_router.py`)**:
-   - Classifies conversational intents locally in `< 1 ms` (greetings with typos like `"ola"`, user disinterest/rejection, farewells, gratitude, inappropriate/troll filters, and explicit human requests).
-   - Responds instantly with `$0.00` API cost and 0 token consumption for common conversational flows.
-
-4. **Multilingual & Cross-Lingual Semantic Retrieval**:
-   - Powered by Google Gemini multilingual embeddings (`gemini-embedding-001`).
-   - Concepts in different languages share the same high-dimensional semantic vector space.
-
-5. **Proactive Troubleshooting & Anti-Saturating Support**:
-   - Solves payment errors (PSE transfer limits, Nequi/Daviplata vouchers), platform links, and admissions rules autonomously.
-   - Restricts human advisor escalation strictly to legitimate edge cases (critical billing disputes, custom enterprise contracts) or explicit human contact requests, eliminating admissions desk saturation.
-
-6. **Operational Telemetry & Cost Metrics (Bonus Feature)**:
-   - Tracks total queries processed, cache hit rate, escalation rate, token usage, and accumulated financial cost in USD.
-   - Accessible via `GET /api/metrics` and the live telemetry API.
-
-7. **Dual-Tier Response Cache (Bonus Feature)**:
-   - Exact hash cache + Semantic similarity cache (cosine similarity >= 0.92).
-   - Reduces response latency to < 1 ms and API cost to $0.00 for repeated or semantically equivalent questions.
-
-8. **Custom Skills & MCP Server (Bonus Feature)**:
-   - Tuition quotation calculator with discounts (`/api/skills/quote`).
-   - Free placement test scheduling (`/api/skills/placement`).
-   - Model Context Protocol (MCP) server in `backend/src/mcp_server.py`.
-
-9. **Cloud & Container Ready (Bonus Feature)**:
-   - Includes `Dockerfile`, `docker-compose.yml`, `render.yaml`, and `Procfile`.
+The assistant automates inquiries regarding language programs, Common European Framework of Reference for Languages (CEFR) levels, schedules, official tuition fees in Colombian Pesos (COP), financing plans, compensation fund discounts (*Cajas de Compensacion Familiar*), international certifications, and campus modalities. It strictly adheres to official institutional documentation, supports cross-lingual semantic retrieval, and routes edge cases to human admissions advisors.
 
 ---
 
-## System Architecture
+## Architecture Overview
 
-```
-                                +-----------------------------------+
-                                |     Business Markdown Docs        |
-                                |       (data/*.md in COP)          |
-                                +-----------------+-----------------+
-                                                  |
-                                                  v (Chunking with Overlap)
-                                +-----------------------------------+
-                                |    Gemini Multilingual Embeddings |
-                                |      (gemini-embedding-001)       |
-                                +-----------------+-----------------+
-                                                  |
-                                                  v
-+------------------+            +-----------------------------------+
-|  Student / Lead  | <----+     |       ChromaDB Vector Store       |
-+------------------+      |     +-----------------+-----------------+
-        |                 |                       |
-        v                 |                       v (Semantic Search)
-+------------------+      |               +---------------+
-| Web Form (UI) /  |----->+-------------->|  RAG Engine   |
-| REST API Client  |                      | (LangChain +  |
-| (FastAPI :8000)  |                      |  Gemini LLM)  |
-+------------------+                      +-------+-------+
-                                                  |
-                                                  v
-                                          +---------------+
-                                          | Scope Filter  |
-                                          +-------+-------+
-                                           /             \
-                                    (Yes) /               \ (No / Inappropriate)
-                                         v                 v
-                              +------------------+  +-------------------+
-                              | Factual Response |  | Scope Boundary /  |
-                              | in User Language |  | Human Escalation  |
-                              +------------------+  +-------------------+
-```
+The system implements a decoupled, layered software architecture designed for high availability, low operational costs, and zero-hallucination compliance:
+
+1. **Presentation Layer (Frontend SPA)**:
+   - Modern, responsive Single Page Application (`frontend/index.html`) served directly by FastAPI.
+   - Includes an institutional Landing Page, interactive Language Catalog cards, Schedule and Campus matrices, an interactive Tuition Calculator in COP, a Diagnostic Placement Test booking modal, and an AI chat interface with query telemetry.
+   - Zero-dependency client stack (Tailwind CSS via CDN, Lucide icons, Marked.js for secure Markdown parsing) optimized for instant rendering.
+
+2. **API & Orchestration Layer (FastAPI)**:
+   - High-performance asynchronous ASGI web server (`backend/src/main.py`) running on Uvicorn.
+   - Pydantic v2 schemas for strict input/output data validation and type safety.
+   - RESTful endpoints for RAG queries (`/api/query`), catalog discovery (`/api/catalog`), live telemetry (`/api/metrics`), tuition quoting (`/api/skills/quote`), and placement scheduling (`/api/skills/placement`).
+
+3. **Cognitive & Semantic Engine (RAG Engine)**:
+   - Hybrid routing pipeline: queries are first evaluated by a deterministic `IntentRouter` (< 1 ms latency, $0.00 API cost) for greetings, farewells, disinterest, or direct human escalation requests.
+   - Dual-tier response caching (`backend/src/cache.py`): exact SHA-256 hash match combined with semantic cosine similarity caching (threshold >= 0.92) to eliminate redundant LLM invocations.
+   - Vector Retrieval: LangChain orchestrates similarity search ($k=5$) against ChromaDB embedded with Google Gemini multilingual embeddings (`gemini-embedding-001`).
+   - Contextual Generation: Grounded prompt engineering with few-shot examples and strict guardrails preventing speculative answers or unsupported claims.
+
+4. **Persistence Layer (Dual-Store Architecture)**:
+   - **Vector Database (ChromaDB)**: Embedded vector store indexing chunked Markdown documents (`programs_and_levels.md`, `admissions_and_pricing.md`, `schedules_and_certifications.md`).
+   - **Relational Database (SQLite 3)**: Normalized transactional database (`database/academy.db`, defined in `database/schema.sql`) enforcing ACID compliance, foreign key constraints, cascading policies, and indexes for leads, bookings, quotes, and audit logs.
+
+5. **Model Context Protocol (MCP) & Custom Skills**:
+   - Algorithmic tools for deterministic math calculations (tuition discounts with Compensar, Colsubsidio, Comfama up to 20%).
+   - Placement test booking automation.
+   - Standard MCP server (`backend/src/mcp_server.py`) exposing tools to external AI agents and IDE integrations.
 
 ---
 
-## Project Structure
+## Relational Database Schema
+
+The relational database (`database/academy.db`) models the operational and transactional domain of the academy. It is structured into 8 normalized tables with foreign keys and performance indexes:
 
 ```
-chatbot-university/
-├── data/                                    # Official business knowledge base
-│   ├── admissions_and_pricing.md           # Tuition in COP, installment plans, discounts, payments
-│   ├── programs_and_levels.md              # Language tracks, CEFR progression (A1-C2), academic FAQ
-│   └── schedules_and_certifications.md     # Shifts, campuses, class link troubleshooting, policies
-├── frontend/                                # Client-side presentation layer (UI)
-│   └── index.html                           # Language Academy educational portal & assistant
-├── backend/                                 # Server-side architecture (Python / FastAPI)
-│   ├── requirements.txt                     # Backend dependencies
++--------------------+        +---------------------+        +--------------------+
+|     PROGRAMAS      | 1    N |   PROGRAMAS_SEDES   | N    1 |       SEDES        |
++--------------------+--------+---------------------+--------+--------------------+
+| id (PK)            |        | id (PK)             |        | id (PK)            |
+| codigo (UNIQUE)    |        | programa_id (FK)    |        | nombre             |
+| nombre             |        | sede_id (FK)        |        | ciudad             |
+| idioma             |        | cupos_disponibles   |        | direccion          |
+| nivel_mcer         |        +---------------------+        | modalidad          |
+| precio_contado_cop |                                       | telefono           |
++---------+----------+                                       +----+----------+----+
+          | 1                                                     | 1        | 1
+          |                                                       |          |
+          | N                                                   N |          | N
++---------v----------+        +---------------------+             |          |
+|    COTIZACIONES    | N    1 |  ESTUDIANTES_LEADS  |<------------+          |
++--------------------+--------+---------------------+                        |
+| id (PK)            |        | id (PK)             |                        |
+| numero_cotizacion  |        | tipo_documento      |                        |
+| programa_id (FK)   |        | numero_documento    |                        |
+| estudiante_id (FK) |        | nombre_completo     |                        |
+| plan_pago          |        | email (INDEX)       |                        |
+| valor_final_cop    |        | telefono            |                        |
++--------------------+        | sede_preferida_id(FK)                        |
+                              +----------+----------+                        |
+                                         | 1                                 |
+                                         |                                   |
+                                         | N                               N |
+                              +----------v----------+                        |
+                              | AGENDAMIENTOS_TEST  |<-----------------------+
+                              +---------------------+
+                              | id (PK)             |
+                              | codigo_confirmacion |
+                              | estudiante_id (FK)  |
+                              | programa_id (FK)    |
+                              | sede_id (FK)        |
+                              | modalidad           |
+                              | fecha_preferida     |
+                              | estado              |
+                              +---------------------+
+```
+
+### Table Definitions & Roles
+
+1. **`programas`**: Catalogs official academic programs (English, French, German, Italian, Portuguese), CEFR levels, duration in weeks, total instructional hours, and tuition in COP (cash and installment rates).
+2. **`sedes`**: Physical campuses (Chapinero, Calle 100 in Bogota; El Poblado, Laureles in Medellin) and the 100% live Online Campus.
+3. **`programas_sedes`**: Associative junction table resolving Many-to-Many (M:N) relationships between academic offerings and authorized campus locations.
+4. **`estudiantes_leads`**: Master registry of prospective and active students, tracking contact information, identification, and preferred campus.
+5. **`agendamientos_test`**: Placement test bookings with unique confirmation codes (`TEST-YYYYMM-XXXXXX`), scheduled dates, modalities, and campus assignments.
+6. **`cotizaciones`**: Historical record of tuition calculations generated via the interactive quoter or API, storing payment plans and applied corporate discounts.
+7. **`tickets_escalamiento`**: Audit trail of conversations escalated to human admissions advisors, capturing user questions and escalation reasons.
+8. **`transacciones_pagos`**: Transaction ledger tracking payment vouchers, PSE transfer references, and billing verifications.
+
+---
+
+## Directory Tree
+
+```
+LanguageAcademy/
+├── backend/                                 # Server application
+│   ├── requirements.txt                     # Python dependencies
 │   └── src/
-│       ├── __init__.py
-│       ├── config.py                       # Configuration & environment loader
-│       ├── generate_documents.py           # Procedural business document generator
-│       ├── ingestion.py                    # Chunking, embeddings & vector persistence
-│       ├── intent_router.py                # Zero-latency local intent & boundary router
-│       ├── rag_engine.py                   # RAG pipeline, cross-lingual prompt & few-shots
-│       ├── catalog_service.py              # Dynamic business catalog extractor
-│       ├── cache.py                        # Exact hash & semantic similarity cache
-│       ├── metrics.py                      # Operational & financial telemetry
-│       ├── skills.py                       # Tuition calculator, test scheduler
-│       ├── mcp_server.py                   # Model Context Protocol (MCP) server
-│       └── main.py                         # FastAPI server & endpoints
-├── docs/                                   # Rigorous technical documentation
-│   ├── 01-product/PRD.md                   # Product requirements & user stories
-│   ├── 03-architecture/system-architecture.md # Technical design & data flows
-│   └── 05-ai/rag-and-prompt-engineering.md # Embedding space & prompt engineering
-├── .env.example                            # Environment variables template
-├── Dockerfile                              # Production container image
-├── docker-compose.yml                      # Container orchestration
-├── generate_documents.py                   # Root runner for document generation
-├── render.yaml                             # 1-Click cloud deployment on Render
-├── Procfile                                # PaaS runner for Railway / Heroku
-├── requirements.txt                        # Root dependencies pointer
-└── README.md                               # Complete project documentation
+│       ├── __init__.py                      # Package initialization
+│       ├── config.py                        # Environment variables and constants
+│       ├── database.py                      # SQLite transactional connection and DAOs
+│       ├── generate_documents.py            # Procedural generator for institutional docs
+│       ├── ingestion.py                     # Document chunking, embedding, ChromaDB loading
+│       ├── intent_router.py                 # Deterministic zero-latency intent classifier
+│       ├── rag_engine.py                    # LangChain retrieval pipeline and Gemini LLM
+│       ├── catalog_service.py               # Markdown parser for dynamic course catalog
+│       ├── cache.py                         # Dual-tier response caching (hash + semantic)
+│       ├── metrics.py                       # Operational and financial telemetry tracker
+│       ├── skills.py                        # Tuition calculator and placement test scheduler
+│       ├── mcp_server.py                    # Model Context Protocol (MCP) server
+│       └── main.py                          # FastAPI ASGI application and REST routes
+├── frontend/                                # Presentation layer
+│   └── index.html                           # Responsive SPA: landing page, catalog, quoter, chat
+├── data/                                    # Official institutional knowledge base (Markdown)
+│   ├── programs_and_levels.md               # Language tracks, CEFR progression, academic FAQ
+│   ├── admissions_and_pricing.md            # Tuition fees in COP, installments, discounts, PSE
+│   └── schedules_and_certifications.md      # Timetables, physical/virtual campuses, policies
+├── database/                                # Relational storage
+│   ├── schema.sql                           # DDL schema script with foreign keys and seed data
+│   └── academy.db                           # SQLite database file
+├── .env.example                             # Environment variables template
+├── .gitignore                               # Git ignored files and directories
+├── Dockerfile                               # Production multi-stage container specification
+├── docker-compose.yml                       # Docker Compose orchestration
+├── generate_documents.py                    # Root entry point to generate business docs
+├── requirements.txt                         # Root requirements pointer
+└── README.md                                # Comprehensive system documentation
 ```
 
 ---
 
-## Quick Start Guide
+## Installation and Quick Start
 
 ### 1. Prerequisites
-- Python 3.10+ installed.
-- Git installed.
-- **Google Gemini API Key** (Free tier from [Google AI Studio](https://aistudio.google.com/)).
+
+- Python 3.10, 3.11, or 3.12 (64-bit).
+- Git.
+- Google Gemini API Key (free tier available at [Google AI Studio](https://aistudio.google.com/)).
 
 ### 2. Clone the Repository
 
 ```bash
-git clone https://github.com/EdgarCorzo777/prueba-languageacademy.git
-cd prueba-languageacademy
+git clone https://github.com/EdgarCorzo777/LanguageAcademy.git
+cd LanguageAcademy
 ```
 
-### 3. Environment Setup
+### 3. Create and Activate Virtual Environment
+
+**On Windows (PowerShell):**
+```powershell
+python -m venv venv
+.\venv\Scripts\Activate.ps1
+```
+
+**On Linux / macOS:**
+```bash
+python3 -m venv venv
+source venv/bin/activate
+```
+
+### 4. Install Dependencies
 
 ```bash
-# 1. Create and activate virtual environment
-python3 -m venv venv
-source venv/bin/activate    # Linux / macOS
-# .\venv\Scripts\Activate.ps1 # Windows
-
-# 2. Install dependencies
+pip install --upgrade pip
 pip install -r requirements.txt
 ```
 
-### 4. Configure Environment Variables
+### 5. Configure Environment Variables
 
+Copy the example configuration file:
 
-Copy `.env.example` to `.env`:
 ```bash
 cp .env.example .env
 ```
 
-Edit `.env` and configure your API key:
+Open `.env` and set your Google Gemini API key:
+
 ```ini
-# Google Gemini Settings (Free Tier)
 GOOGLE_API_KEY=AIzaSy...your_gemini_api_key_here
 GEMINI_MODEL_NAME=gemini-3.5-flash-lite
 GEMINI_EMBEDDING_MODEL=gemini-embedding-001
 
-# Application Server Settings
 APP_HOST=0.0.0.0
 APP_PORT=8000
 VECTOR_DB_DIR=./chroma_db
 CACHE_ENABLED=true
 ```
 
-### 5. Generate Business Documents
+### 6. Generate Business Documents
 
-Generate the Colombian Language Academy documents procedurally:
+Generate the official institutional Markdown documents:
+
 ```bash
 python generate_documents.py
 ```
 
-### 6. Ingest Documents into Vector Database
+This creates `programs_and_levels.md`, `admissions_and_pricing.md`, and `schedules_and_certifications.md` in the `data/` directory.
 
+### 7. Ingest Knowledge Base into Vector Database
 
-Populate ChromaDB with chunked embeddings:
+Process, chunk, and embed the documents into ChromaDB:
+
 ```bash
 python -m backend.src.ingestion
 ```
@@ -198,107 +227,127 @@ python -m backend.src.ingestion
 
 ## Running the Application
 
-### Start the Server (Web Form & REST API):
+### Local Development Server
+
+Run the application using Python:
 
 ```bash
 python -m backend.src.main
 ```
-*(Or `uvicorn backend.src.main:app --host 0.0.0.0 --port 8000 --reload`)*
 
-Once started, open your browser:
-- **Interactive Web Form UI**: [http://localhost:8000/](http://localhost:8000/)
-- **Swagger REST API Documentation**: [http://localhost:8000/docs](http://localhost:8000/docs)
-- **Live Metrics JSON**: [http://localhost:8000/api/metrics](http://localhost:8000/api/metrics)
-- **Health Check**: [http://localhost:8000/health](http://localhost:8000/health)
+Or using Uvicorn directly:
 
-### Running with Docker:
+```bash
+uvicorn backend.src.main:app --host 0.0.0.0 --port 8000 --reload
+```
+
+### Application URLs
+
+Once the server is running, navigate to:
+
+- **Institutional Web Portal & Assistant**: `http://localhost:8000/`
+- **Interactive Swagger REST Documentation**: `http://localhost:8000/docs`
+- **ReDoc API Documentation**: `http://localhost:8000/redoc`
+- **System Health Status**: `http://localhost:8000/health`
+- **Live Telemetry & Cost KPIs**: `http://localhost:8000/api/metrics`
+
+### Running with Docker
+
+Build and start the containerized application with Docker Compose:
 
 ```bash
 docker-compose up --build
 ```
 
----
-
-## Testing & Validation Examples
-
-### 1. In-Scope Query (Spanish - Tuition & Discounts)
-- **Query**: *¿Cuánto cuesta el curso de inglés y qué descuentos tienen con Compensar?*
-- **Response**:
-  > ¡Hola! Con gusto te comparto los valores oficiales de nuestros programas de inglés y los beneficios del convenio con la caja de compensación **Compensar**:
-  > 
-  > - **Programa Estándar (1 Nivel / 16 semanas - 96 horas)**:
-  >   - **Pago de contado**: $1,450,000 COP por nivel.
-  >   - **Plan financiado**: 4 cuotas mensuales de $395,000 COP (Total: $1,580,000 COP).
-  > - **Descuento Compensar**:
-  >   - Afiliados Categoría A: **20% de descuento**.
-  >   - Afiliados Categoría B: **15% de descuento**.
-
-### 2. Operational Troubleshooting (Payment Issue via PSE)
-- **Query**: *Tengo un problema con el pago de PSE, me sale rechazado*
-- **Response**:
-  > Lamento el inconveniente con tu pago por PSE. Este rechazo suele deberse a situaciones muy comunes que puedes solucionar rápidamente:
-  > 1. **Topes diarios de transferencia en tu app bancaria:** En Colombia (Bancolombia, Davivienda, etc.), el límite diario por defecto para PSE suele ser de $1,000,000 COP. Ingresa a tu app y sube temporalmente el tope.
-  > 2. **Fondos disponibles:** Verifica que tu saldo cubra el valor total.
-  > 3. **Alternativas:** Puedes elegir el **Plan en 4 Cuotas de $395,000 COP** o pagar directamente por **Nequi / Daviplata**.
-
-### 3. Cross-Lingual In-Scope Query (English - Schedules & Saturdays)
-- **Query**: *Tell me about the schedule and if I can take classes on Saturdays.*
-- **Response**:
-  > Hello! Yes, you can absolutely take classes on Saturdays. We offer flexible schedule options:
-  > - **Saturday Intensive Shift**: Saturdays, 8:00 AM to 1:00 PM or 1:30 PM to 6:30 PM (COT / UTC-5).
-  > - **Weekday Shifts**: Morning (7:00-8:30 AM or 9:00-11:00 AM), Afternoon, and Evening (6:30-8:30 PM).
-
-### 4. Respectful Disinterest / Negative Intent (Zero Latency - No Escalation)
-- **Query**: *no quiero que me asesores, no me interesa*
-- **Response**:
-  > Entendido, no hay ningún problema. Si en algún momento necesitas información sobre los programas de idiomas, horarios o tarifas de **Language Academy**, aquí estaré a tu disposición. ¡Que tengas un excelente día!
-
-### 5. Legitimate Human Escalation (Explicit Contact Request)
-- **Query**: *Por favor pásame a un asesor humano de admisiones*
-- **Response**:
-  > ¡Con mucho gusto! Te pongo en contacto directo con nuestro equipo de admisiones de **Language Academy**:
-  > 
-  > **Canales Oficiales de Atención:**
-  > - **WhatsApp / Teléfono Móvil:** [+57 (300) 123-4567](https://wa.me/573001234567)
-  > - **Correo de Admisiones:** `admisiones@languageacademy.edu.co`
-  > - **PBX Bogotá:** +57 (601) 745-8900
-  > - **Horario de Atención:** Lunes a Viernes de 8:00 AM a 6:00 PM | Sábados de 8:00 AM a 1:00 PM (Hora Colombia)
-
-### 6. Cache Verification
-- Submitting the same question a second time returns `cached: true` with a response time of < 1 ms and $0.00 API cost.
+The container automatically generates the documents, initializes ChromaDB and SQLite, and starts the FastAPI server on port 8000.
 
 ---
 
 ## REST API Reference
 
-| Endpoint | Method | Description |
-| :--- | :--- | :--- |
-| `/` | `GET` | Serves the interactive Single Page Web Form application. |
-| `/api/query` | `POST` | Process admissions query with RAG, caching, and escalation. |
-| `/api/catalog` | `GET` | Dynamic business catalog extracted directly from markdown docs. |
-| `/api/metrics` | `GET` | Retrieve live operational telemetry, token counts, and costs. |
-| `/api/metrics/reset` | `POST` | Reset operational telemetry counters. |
-| `/api/cache/stats` | `GET` | Check exact and semantic response cache statistics. |
-| `/api/cache/clear` | `POST` | Flush response cache entries. |
-| `/api/skills/quote` | `POST` | Calculate custom tuition quote in COP with discounts. |
-| `/api/skills/placement` | `POST` | Book a free language diagnostic placement test. |
-| `/api/ingest` | `POST` | Trigger background document reindexing into ChromaDB. |
-| `/health` | `GET` | Service readiness and dependency health status. |
+| Endpoint | Method | Tag | Description |
+| :--- | :--- | :--- | :--- |
+| `/` | `GET` | Web Form | Delivers the Single Page Web Application. |
+| `/health` | `GET` | General | Checks service health, vector store presence, and AI configuration. |
+| `/api/query` | `POST` | RAG | Processes admissions inquiries with semantic search, few-shots, and guardrails. |
+| `/api/catalog` | `GET` | Catalog | Returns dynamically parsed course offerings, schedules, and campuses. |
+| `/api/knowledge-base` | `GET` | RAG | Lists active Markdown documents loaded in `data/` with metadata. |
+| `/api/skills/quote` | `POST` | Custom Skills | Calculates customized tuition in COP with financing and corporate discounts. |
+| `/api/skills/placement` | `POST` | Custom Skills | Schedules a free placement exam and registers the booking in SQLite. |
+| `/api/metrics` | `GET` | Telemetry | Returns operational KPIs: query counts, token usage, latency, and costs in USD. |
+| `/api/metrics/reset` | `POST` | Telemetry | Resets telemetry counters. |
+| `/api/cache/stats` | `GET` | Cache | Returns exact hash and semantic similarity cache hit rates. |
+| `/api/cache/clear` | `POST` | Cache | Flushes in-memory cache entries. |
 
 ---
 
-## Acceptance Criteria Checklist
+## Query Verification and Test Scenarios
 
-- [x] **Reception Channel**: Interactive Responsive Web Form + REST API (`FastAPI`).
-- [x] **AI Model Integration**: Integrated with Google Gemini (`gemini-3.5-flash-lite` / `gemini-embedding-001`) for low latency and high cost efficiency.
-- [x] **Procedural Documents**: `.py` script (`generate_documents.py`) creating the 3 rich business documents for the Colombian Language Academy in COP.
-- [x] **RAG Vector Base**: Ingests, chunks (with overlap), and embeds documents into ChromaDB.
-- [x] **Cross-Lingual Support**: Native cross-lingual semantic retrieval across English, Spanish, and French.
-- [x] **Prompt Engineering**: System prompt with brand voice, anti-hallucination rules, and few-shot examples.
-- [x] **Human Escalation**: Deterministic fallback and human advisor contact routing when out of scope.
-- [x] **Bonus 1 - Custom Skills & MCP**: Tuition calculator, placement test scheduler, and MCP server (`backend/src/mcp_server.py`).
-- [x] **Bonus 2 - Metrics**: Real-time queries, token counts, cost in USD, and escalation rate tracking (`/api/metrics`).
-- [x] **Bonus 3 - Response Cache**: Dual exact and semantic cache reducing latency to < 1 ms and eliminating redundant API costs.
-- [x] **Bonus 4 - Public Deployment**: `Dockerfile`, `docker-compose.yml`, `render.yaml`, and `Procfile`.
-- [x] **Security**: API Keys loaded strictly from `.env`, never hardcoded.
-- [x] **Deliverable Documentation**: Full documentation and `README.md` in English without emojis.
+### 1. In-Scope Inquiries (Spanish - Pricing and Financing)
+
+- **Input**: *¿Cuánto cuesta el curso de inglés y qué facilidades de pago tienen?*
+- **Expected Outcome**:
+  - Exact tuition amounts in COP ($1,450,000 COP upfront or 4 installments of $395,000 COP).
+  - Discount details for compensation funds (Compensar, Colsubsidio, Comfama: 15% to 20%).
+  - Metadata indicates the source document (`admissions_and_pricing.md`) and execution latency.
+
+### 2. Operational Troubleshooting (Payment Rejection)
+
+- **Input**: *Tengo un problema con el pago por PSE, me sale rechazado*
+- **Expected Outcome**:
+  - Immediate operational guidance explaining daily bank transfer limits in Colombia.
+  - Actionable steps to increase daily transfer limits in online banking apps or switch to installment/Nequi alternatives.
+  - Zero false escalation to admissions desks.
+
+### 3. Cross-Lingual Semantic Retrieval (English Input)
+
+- **Input**: *Tell me about the available schedules and if I can take classes on Saturdays.*
+- **Expected Outcome**:
+  - Accurate response in English describing the Saturday Intensive Shift (8:00 AM to 1:00 PM or 1:30 PM to 6:30 PM COT).
+  - Retrieved from Spanish-authored institutional documentation via multilingual vector embeddings.
+
+### 4. Zero-Latency Guardrail Routing (Disinterest / Negative Intent)
+
+- **Input**: *no me interesa, no quiero nada*
+- **Expected Outcome**:
+  - Classifies intent locally within `IntentRouter`.
+  - Latency < 1 ms, 0 tokens consumed, $0.00 API cost.
+  - Courteous closing message without invoking Google Gemini.
+
+### 5. Deterministic Human Escalation
+
+- **Input**: *Por favor comunícame con un asesor humano de admisiones*
+- **Expected Outcome**:
+  - Detects explicit human assistance request.
+  - Returns official contact channels: WhatsApp (+57 300 123-4567), email (`admisiones@languageacademy.edu.co`), and PBX (+57 601 745-8900).
+  - Sets `escalated: true` in response payload for CRM tracking.
+
+### 6. Response Caching Verification
+
+- Submitting the identical question a second time returns `cached: true` with a response latency < 1 ms and zero token consumption.
+
+---
+
+## Competency Certification Deliverables
+
+This repository fulfills the requirements for the Colombian National Competency Standards:
+
+- **Norma 220501095 - Diseñar la solución de software**:
+  - Technical design and system architecture specifications.
+  - UML Diagrams: Use Cases, Class Diagram, Sequence Diagram.
+  - Entity-Relationship Diagram (ERD) with relational foreign key constraints and junction tables.
+  - User Interface Mockups and Prototypes.
+  - Formal evidence documentation for software design standard 220501095.
+
+- **Norma 220501096 - Desarrollar la solución de software**:
+  - Complete, modular source code in Python and FastAPI.
+  - System usage manual with deployment instructions and functional screen captures.
+  - Production-ready database schema (`database/schema.sql`) and SQLite database.
+  - Version-controlled Git repository hosted on GitHub.
+  - Formal evidence documentation for software development standard 220501096.
+
+---
+
+## License
+
+This project is licensed under the MIT License.

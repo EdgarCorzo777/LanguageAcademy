@@ -25,3 +25,7 @@ metrics.json
 .idea/
 .DS_Store
 Thumbs.db
+node_modules/
+
+# SENA Preparation and Deliverables (Local)
+Preparacion proyecto/
